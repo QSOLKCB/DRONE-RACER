@@ -2,24 +2,33 @@
 import {FixedClock} from '../engine/time/index.js';
 import {createSession,setFlightMode,stepSession,secondsFromTicks,STEP} from './game.js';
 import {drawScene} from './render.js';
+import {compilePack,DEFAULT_PACK,SPECTRUM_PACK} from './mods.js';
+import {presetRecordKey,importedRecordKey} from './records.js';
 const canvas=document.querySelector('#flight'),hud=document.querySelector('#hud'),notice=document.querySelector('#notice');
 const startButton=document.querySelector('#restart'),pauseButton=document.querySelector('#pause');
 const modeButton=document.querySelector('#mode'),overlay=document.querySelector('#overlay');
 const keys=new Set(),touch=new Set(),clock=new FixedClock({step:STEP,maxFrame:.12,maxSteps:6});
 const KEY='qsol.drone-racer.independence-sprint.v1.bestTicks';
 let session,started=false,paused=true,previous=performance.now(),lastGate=0;
+let activePack=compilePack(DEFAULT_PACK),activeRecordKey=presetRecordKey('default'),importGeneration=0;
+const packSelect=document.querySelector('#pack-select');
+const packUpload=document.querySelector('#pack-upload');
+const packStatus=document.querySelector('#pack-status');
+const viewButton=document.querySelector('#view-mode');
+function bestKey(){return activeRecordKey;}
 function best(){
-  try{const raw=localStorage.getItem(KEY);if(raw===null)return null;
+  try{const raw=localStorage.getItem(bestKey());if(raw===null)return null;
     const n=Number(raw);return Number.isSafeInteger(n)&&n>0?n:null;
   }catch{return null;}
 }
-function saveBest(n){try{localStorage.setItem(KEY,String(n));}catch{}}
+function saveBest(n){try{localStorage.setItem(bestKey(),String(n));}catch{}}
 function clearInputs(){keys.clear();touch.clear();}
 function updateHUD(){
   if(!session)return;const r=session.race;
   hud.textContent='GATE '+Math.min(r.nextGate+1,session.track.gates.length)+'/'+session.track.gates.length+
     ' · '+secondsFromTicks(r.ticks)+'s · '+Math.hypot(...session.body.velocity).toFixed(1)+' m/s'+
     ' · '+(session.assisted?'ASSISTED':'INERTIAL')+
+    ' · '+session.droneName+' · '+(session.camera==='chase'?'CHASE':'FPV')+
     ' · BEST '+(secondsFromTicks(r.bestTicks)??'--')+'s';
 }
 function pause(on){
@@ -37,9 +46,11 @@ function pause(on){
   pauseButton.textContent=paused?'Resume':'Pause';updateHUD();
 }
 function reset(){
-  session=createSession(undefined,best());clock.reset();clock.setPaused(false);
+  session=createSession(activePack.track,best(),activePack.drone);
+  session.accent=activePack.accent;clock.reset();clock.setPaused(false);
   started=true;paused=false;clearInputs();lastGate=0;overlay.hidden=true;
   modeButton.textContent='Mode: Assisted';pauseButton.textContent='Pause';
+  if(viewButton)viewButton.textContent='View: FPV';
   pauseButton.disabled=false;
   notice.textContent='FLY THROUGH EACH GATE IN ORDER';previous=performance.now();updateHUD();
 }
@@ -50,15 +61,43 @@ function command(){
     turn:[axis('ArrowDown','ArrowUp'),axis('ArrowLeft','ArrowRight'),axis('KeyC','KeyV')],
     brake:down('Space')};
 }
+function applyPack(pack,recordKey){
+  if(typeof recordKey!=='string'||!recordKey)throw new TypeError('record identity required');
+  activePack=pack;activeRecordKey=recordKey;
+  if(packStatus)packStatus.textContent=pack.title+' · verified local data pack';
+  if(started)reset();
+  else{
+    session=createSession(activePack.track,best(),activePack.drone);
+    session.accent=activePack.accent;updateHUD();
+  }
+  const title=document.querySelector('#pack-title');
+  if(title)title.textContent=pack.title.toUpperCase();
+}
+function cameraMode(){
+  if(!session)return;
+  session.camera=session.camera==='fpv'?'chase':'fpv';
+  if(viewButton)viewButton.textContent='View: '+(session.camera==='chase'?'Chase':'FPV');
+  updateHUD();
+}
 function mode(){
   setFlightMode(session,!session.assisted);
   modeButton.textContent='Mode: '+(session.assisted?'Assisted':'Inertial');updateHUD();
 }
+function isFormControl(target){
+  return Boolean(target?.closest?.('input,select,textarea,button,[contenteditable]'));
+}
+document.addEventListener('focusin',e=>{
+  if(isFormControl(e.target))clearInputs();
+});
 document.addEventListener('keydown',e=>{
+  // Do not steal Arrow/Space or global flight shortcuts from native controls.
+  // Focusing a control also cancels previously held flight input.
+  if(isFormControl(e.target??document.activeElement))return;
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
   if(e.repeat)return;
   if(e.code==='KeyR'){reset();return;}
   if(e.code==='KeyM'){mode();return;}
+  if(e.code==='KeyT'){cameraMode();return;}
   if(e.code==='KeyP'){pause(!paused);return;}
   keys.add(e.code);
 });
@@ -75,19 +114,56 @@ startButton.addEventListener('click',reset);
 document.querySelector('#restart-inline').addEventListener('click',reset);
 pauseButton.addEventListener('click',()=>pause(!paused));
 modeButton.addEventListener('click',mode);
+if(viewButton)viewButton.addEventListener('click',cameraMode);
+if(packSelect)packSelect.addEventListener('change',()=>{
+  importGeneration++;
+  if(packSelect.value==='default')applyPack(compilePack(DEFAULT_PACK),presetRecordKey('default'));
+  else if(packSelect.value==='spectrum')applyPack(compilePack(SPECTRUM_PACK),presetRecordKey('spectrum'));
+});
+if(packUpload)packUpload.addEventListener('change',async()=>{
+  const file=packUpload.files?.[0],generation=++importGeneration;
+  if(!file)return;
+  try{
+    if(file.size>32768)throw new RangeError('pack exceeds 32 KiB');
+    const source=JSON.parse(await file.text());
+    if(generation!==importGeneration)return;
+    const pack=compilePack(source);
+    const recordKey=await importedRecordKey(pack.id,source);
+    // A newer import or preset choice wins; no late async activation.
+    if(generation!==importGeneration)return;
+    applyPack(pack,recordKey);
+    if(packSelect)packSelect.value='custom';
+  }catch(error){
+    if(generation===importGeneration&&packStatus)
+      packStatus.textContent='PACK REJECTED · '+error.message;
+  }finally{packUpload.value='';}
+});
+const packExport=document.querySelector('#pack-export');
+if(packExport)packExport.addEventListener('click',()=>{
+  const source=packSelect?.value==='spectrum'?SPECTRUM_PACK:DEFAULT_PACK;
+  const url=URL.createObjectURL(new Blob([JSON.stringify(source,null,2)+'\n'],
+    {type:'application/json'}));
+  const a=document.createElement('a');
+  a.href=url;a.download=source.id+'.json';a.click();URL.revokeObjectURL(url);
+});
 function resize(){
   const scale=Math.min(devicePixelRatio||1,1.5);
   canvas.width=Math.max(1,Math.min(1600,Math.round(canvas.clientWidth*scale)));
   canvas.height=Math.max(1,Math.min(1000,Math.round(canvas.clientHeight*scale)));
 }
 new ResizeObserver(resize).observe(canvas);resize();
-session=createSession(undefined,best());pauseButton.disabled=true;updateHUD();
+session=createSession(activePack.track,best(),activePack.drone);
+session.accent=activePack.accent;pauseButton.disabled=true;updateHUD();
 function frame(now){
   const elapsed=Math.max(0,(now-previous)/1000);previous=now;
   if(!paused)clock.advance(elapsed,()=>{
     stepSession(session,command());
     const r=session.race;
     if(r.nextGate!==lastGate){lastGate=r.nextGate;notice.textContent='GATE CLEARED · '+r.nextGate+'/'+session.track.gates.length;}
+    if(r.status==='out-of-bounds'){
+      pause(true);pauseButton.disabled=true;
+      notice.textContent='OUT OF Q16.16 COURSE BOUNDS — PRESS R TO RESTART';
+    }
     if(r.status==='finished'){
       saveBest(r.bestTicks);pause(true);pauseButton.disabled=true;
       notice.textContent='FINISHED IN '+secondsFromTicks(r.finishedTicks)+'s — PRESS R TO RESTART';

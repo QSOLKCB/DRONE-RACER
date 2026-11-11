@@ -5,26 +5,43 @@
 <title>DRONE-RACER | QSOL-IMC</title><link rel="stylesheet" href="./styles.css"></head><body>
 <header class="top"><div class="brand">DRONE<span>RACER</span><small>QSOL-IMC // VANILLAJS</small></div>
 <nav aria-label="Project links"><a href="https://github.com/QSOLKCB/DRONE-RACER">SOURCE</a><a href="https://github.com/QSOLKCB/VANILLAJS">ENGINE</a></nav></header>
-<main><section class="intro"><p class="eyebrow">DRONE-001 / FIRST FLIGHT</p><h1>Race the void.<br><span>Own the machine.</span></h1>
-<p>A six-gate, offline-first time trial on the VANILLAJS flight engine. No accounts, cloud service or runtime packages required.</p></section>
+<main><section class="intro"><p class="eyebrow">DRONE-002 / ALIEN MATH COURSE KIT</p><h1>Race the void.<br><span>Own the machine.</span></h1>
+<p>A six-gate time trial with exact ALIEN MATH course authoring, local data-only mods and an optional chase camera. Flight dynamics remain Float64.</p></section>
 <div class="shell"><div class="status"><span id="hud" role="status" aria-live="off">READY</span><span>FLOATING-POINT FLIGHT · NOT Q16.16</span></div>
 <div class="viewport"><canvas id="flight" width="960" height="540" aria-label="Perspective view of six neon drone race gates"></canvas>
-<div class="start" id="overlay"><h2>INDEPENDENCE SPRINT</h2><p>Six gates. One clock. Zero excuses.</p>
+<div class="start" id="overlay"><h2 id="pack-title">INDEPENDENCE SPRINT</h2><p>Six gates. One clock. Zero excuses.</p>
 <button class="primary" id="restart" type="button">START RACE / RESTART</button></div>
 <div class="notice" id="notice" aria-live="polite">START WHEN READY</div></div>
 <div class="buttons"><button id="pause" type="button">Pause</button><button id="mode" type="button">Mode: Assisted</button>
-<button id="restart-inline" type="button">Restart</button><span>NO TELEMETRY · LOCAL BEST TIME</span></div>
+<button id="restart-inline" type="button">Restart</button><button id="view-mode" type="button">View: FPV</button><span>NO TELEMETRY · LOCAL BEST TIME</span></div>
 <div class="touch" aria-label="Touch flight controls">
 <button data-control="KeyA" type="button" aria-label="Strafe left">◀</button>
 <button data-control="KeyW" type="button" aria-label="Forward thrust">▲ THRUST</button>
 <button data-control="KeyD" type="button" aria-label="Strafe right">▶</button>
 <button data-control="ArrowLeft" type="button" aria-label="Yaw left">↶</button>
 <button data-control="Space" type="button" aria-label="Brake">BRAKE</button>
-<button data-control="ArrowRight" type="button" aria-label="Yaw right">↷</button></div></div>
+<button data-control="ArrowRight" type="button" aria-label="Yaw right">↷</button></div>
+<section class="mod-panel" aria-label="Local drone and track packs">
+ <div><p class="eyebrow">INDEPENDENCE MOD KIT / DATA ONLY</p>
+ <h2>Choose a drone. Change the course.</h2>
+ <p>Load a validated local JSON pack or edit an example. No executable mods, accounts or remote services.</p></div>
+ <div class="mod-actions">
+  <label for="pack-select">Built-in pack
+   <select id="pack-select"><option value="default">Independence Scout · Sprint</option>
+   <option value="spectrum">Spectral Wasp · Dash</option>
+   <option value="custom" disabled>Imported local pack</option></select>
+  </label>
+  <label class="file-mod" for="pack-upload">Import JSON
+   <input id="pack-upload" type="file" accept=".json,application/json"></label>
+  <button id="pack-export" type="button">Download example pack</button>
+ </div>
+ <p id="pack-status" role="status" aria-live="polite">Independence Sprint · verified built-in pack</p>
+ <p class="mod-note">ALIEN MATH quantizes the gate coordinates. Flight remains Float64, explicitly projected to Q16.16 for checkpoint adjudication. The renderer never decides a race result.</p>
+</section></div>
 <aside class="help"><h2>THE CONTROLS</h2>
 <p><kbd>W</kbd>/<kbd>S</kbd> thrust · <kbd>A</kbd>/<kbd>D</kbd> strafe · <kbd>Q</kbd>/<kbd>E</kbd> vertical</p>
 <p><kbd>ARROWS</kbd> pitch/yaw · <kbd>C</kbd>/<kbd>V</kbd> roll · <kbd>SPACE</kbd> brake</p>
-<p><kbd>M</kbd> assisted/inertial · <kbd>P</kbd> pause · <kbd>R</kbd> restart</p>
-<p>Pass through the highlighted frames in order. Swept world-space crossings count the gates; pixels do not.</p></aside></main>
+<p><kbd>M</kbd> assisted/inertial · <kbd>T</kbd> FPV/chase · <kbd>P</kbd> pause · <kbd>R</kbd> restart</p>
+<p>Pass through the highlighted frames in order. Ordered exact Q16.16 swept crossings count the gates; pixels do not.</p></aside></main>
 <footer>THIS IS NOT A PRODUCT. THIS IS <b>INDEPENDENCE.</b> 👽 · <a href="https://github.com/QSOLKCB/INDEPENDENCE">INDEPENDENCE</a> · Apache-2.0</footer>
 <script type="module" src="./src/main.js"></script></body></html>

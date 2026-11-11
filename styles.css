@@ -26,3 +26,23 @@ kbd{font:.78rem monospace;border:1px solid #375268;border-radius:3px;background:
 footer{text-align:center;padding:28px 15px 50px;color:#94a8ba;border-top:1px solid #1b3444;font:.8rem monospace}
 footer b{color:#68ebd6}
 @media(max-width:700px){nav{gap:10px}.top{padding:12px}.brand{font-size:1.2rem}.status,.buttons{font-size:.7rem;padding:9px}.status span:last-child{display:none}.viewport{aspect-ratio:4/3}h1{font-size:2.7rem}}
+
+
+/* DRONE-002: offline-first, data-only track packs and simple drone skins. */
+.mod-panel{border-top:1px solid #28516a;background:linear-gradient(90deg,#0b2234,#16132b);
+  padding:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:12px 24px}
+.mod-panel h2{font-size:1.35rem;margin:.2rem 0;color:#a8ffee}
+.mod-panel p{color:#a7c2d2;margin:.4rem 0;font-size:.85rem}
+.mod-actions{display:flex;align-items:end;flex-wrap:wrap;gap:10px;min-width:0}
+.mod-actions label{display:block;font:700 .73rem monospace;color:#9fe9e1;min-width:0}
+.mod-actions select{display:block;background:#071b29;color:#d6faf7;border:1px solid #4ba19c;
+  border-radius:5px;padding:10px;max-width:100%;min-width:0;margin-top:5px}
+.mod-actions .file-mod{cursor:pointer;border:1px solid #4ba19c;padding:10px;border-radius:5px}
+.file-mod input{display:block;max-width:160px;margin-top:5px;font-size:.7rem}
+.mod-panel #pack-status{grid-column:1/-1;color:#7bf8d7;font:700 .78rem monospace;overflow-wrap:anywhere}
+.mod-panel .mod-note{grid-column:1/-1;font-size:.75rem;color:#8eb1c9}
+@media(max-width:760px){
+  .mod-panel{grid-template-columns:minmax(0,1fr);padding:12px}
+  .mod-actions{align-items:stretch}
+  .mod-actions label,.mod-actions button{max-width:100%}
+}

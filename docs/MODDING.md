@@ -1,9 +1,5 @@
-# DRONE-RACER future modding
+# Modding DRONE-RACER
 
-**This is not a product. This is INDEPENDENCE.**
+**DRONE-002 now has a working data-only Mod Kit.** Read [the Mod Guide](MOD_GUIDE.md) for importing locally edited JSON, colour reskins, flight presets, exact Q16 gate tracks and limitations.
 
-DRONE-001 publishes complete editable source; it does not yet supply a stable mod loader or SDK. Editing `src/track.js` is a source-level experiment, not a promised user-facing JSON import format.
-
-Planned DRONE-003: validated versioned data-only track/drone/mode manifests, local asset provenance, safe save-profile isolation, scene editing, reproducible package tools, and optional trusted JavaScript extension APIs from the future VANILLAJS Mod SDK. An executable same-origin JavaScript mod has the application's privileges and is **not** sandboxed by a permission manifest.
-
-Existing practical models: [OFFLINE-GAMES MOD_GUIDE](https://github.com/QSOLKCB/OFFLINE-GAMES/blob/main/MOD_GUIDE.md) and [HOW_TO_MAKE_OFFLINE_GAMES](https://github.com/QSOLKCB/OFFLINE-GAMES/blob/main/HOW_TO_MAKE_OFFLINE_GAMES.md).
+The general VANILLAJS Mod SDK, trusted executable JavaScript extensions, advanced assets, track editing and custom gameplay scripts remain future projects. **This is not a product. This is INDEPENDENCE.**

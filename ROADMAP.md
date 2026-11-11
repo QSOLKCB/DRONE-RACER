@@ -1,6 +1,6 @@
 # DRONE-RACER — research and game development roadmap
 
-**Current:** DRONE-001 implementation proposed for owner review. Planned items are not shipped capabilities.
+**Current:** DRONE-001 merged and deployed. DRONE-002 proposed for review; later phases remain planned and unimplemented.
 
 ## Policy
 
@@ -8,21 +8,25 @@
 - Work sequentially: one PR, executed evidence, owner review, merge, then authorization for the next phase.
 - No forced merge, moving release tags, unreviewed self-hosted GPU work, network-required runtime or scientific claims without independent evidence.
 
-## DRONE-001 — First Flight (this PR)
+## DRONE-001 — First Flight (merged)
 
 - [x] 6DOF source-pinned VANILLAJS flight and fixed 60 Hz simulation.
 - [x] Six ordered swept-checkpoint race gates and integer tick timing.
 - [x] Assisted and inertial modes, keyboard/touch controls, local record, pause and reset.
 - [x] Pure Canvas presentation with no mandatory GPU backend.
 - [x] Tests, documentation, SHA-256-verified static build and GitHub Pages workflow.
-- [ ] Hosted PR CI and first deployment evidence, to be verified after publication/merge.
+- [x] Original PR CI passed; GitHub Pages deployed after reviewed merge.
 
-## DRONE-002 — ALIEN MATH course authoring
+## DRONE-002 — ALIEN MATH and data-only mod kit (this PR)
 
-- [ ] Exact rational authored track geometry and independent Python Fraction reference oracle.
-- [ ] Explicit Q16.16 quantization policy where needed; no silent fixed/float coercion.
-- [ ] Versioned track fixtures, strict degenerate geometry cases and visual course editor prototype.
-- [ ] Replay experiments with a defined source-bound contract; do not equate floating-point flight with cross-browser bit-exactness.
+- [x] Source-pinned reviewed ALIEN MATH course bridge and unchanged original Float64 flight kernel.
+- [x] Checked exact authoring with explicit Q16.16 quantization and widened swept gate admission.
+- [x] Independent Python exact-Float64 Fraction oracle; representative edge/rejection cases and source blob pin tests.
+- [x] Two working drone/course presets, bounded JSON import, colour reskins and independent local records.
+- [x] Optional third-person chase view drawn from existing flight pose.
+- [x] How-to, mod and numerical boundary documentation.
+- [ ] Visual drag/drop course editor and arbitrary oriented hoops: future phase.
+- [ ] Cross-browser bit-exact physics/replay proof: not claimed; remains open.
 
 ## VANILLAJS-OPT-002 — workload-based engine optimization
 

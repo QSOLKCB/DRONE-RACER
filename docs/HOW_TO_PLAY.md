@@ -21,3 +21,12 @@ Click **START RACE** and pass each highlighted rectangular gate, in order, movin
 Touch buttons give a simpler forward/strafe/yaw/brake layout. The first demo is primarily keyboard-oriented; full mobile controller ergonomics and gamepad support remain planned.
 
 The race currently has no collision walls, gates as solid meshes, ranked server, damage, cloud sync, AI pilots or drone upgrades. Leaving the track is possible. Losing window focus clears input and pauses the game.
+
+
+## DRONE-002 controls and mods
+
+Use **View: Chase** or press **T** to switch between FPV and a procedural third-person drone. Switch between **Independence Scout** and **Spectral Wasp** from the Mod Kit. Changing packs resets the race safely; each pack has its own best-time record.
+
+Click **Download example pack**, edit the resulting JSON offline, then **Import JSON** to validate and play the new track/drone. Invalid packs do not replace a running, validated pack. See [Mod Guide](MOD_GUIDE.md).
+
+The active race now uses ALIEN MATH Q16.16 compiled gate boundaries. This does not make the Float64 flight simulation itself bit-exact across browsers.

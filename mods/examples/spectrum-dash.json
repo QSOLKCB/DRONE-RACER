@@ -1,0 +1,74 @@
+{
+  "kind": "qsol.drone-racer.pack.v1",
+  "id": "spectrum-dash",
+  "version": 1,
+  "title": "Spectrum Dash",
+  "accent": "#ff68dc",
+  "drone": {
+    "name": "Spectral Wasp",
+    "color": "#ff95e6",
+    "mass": 0.75,
+    "halfSize": 0.35,
+    "acceleration": 48,
+    "maxSpeed": 62,
+    "response": 2.8,
+    "angularAcceleration": 4,
+    "turnSpeed": 2.6,
+    "angularResponse": 6,
+    "brake": 5
+  },
+  "course": {
+    "id": "spectrum-dash",
+    "version": 1,
+    "gates": [
+      {
+        "id": "01",
+        "x": "0",
+        "y": "3",
+        "z": "-28",
+        "width": "14",
+        "height": "9"
+      },
+      {
+        "id": "02",
+        "x": "-2",
+        "y": "4",
+        "z": "-75",
+        "width": "13",
+        "height": "9"
+      },
+      {
+        "id": "03",
+        "x": "4",
+        "y": "4",
+        "z": "-124",
+        "width": "13",
+        "height": "9"
+      },
+      {
+        "id": "04",
+        "x": "-2",
+        "y": "3.5",
+        "z": "-175",
+        "width": "12",
+        "height": "8"
+      },
+      {
+        "id": "05",
+        "x": "-3",
+        "y": "4",
+        "z": "-225",
+        "width": "12",
+        "height": "8"
+      },
+      {
+        "id": "06",
+        "x": "0",
+        "y": "3",
+        "z": "-285",
+        "width": "14",
+        "height": "9"
+      }
+    ]
+  }
+}
