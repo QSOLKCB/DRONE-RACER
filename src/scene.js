@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Game-specific retained geometry over the pinned VANILLAJS optional renderer.
-import {OptionalRenderer} from '../engine/render-optional/index.js';
+import {DepthRenderer} from './depth-renderer.js';
 import {rotate,perspective,viewMatrix,multiplyMatrices} from '../engine/math/index.js';
 import {BUILTIN_SKINS} from './skins.js';
 export const QUALITY=Object.freeze({
@@ -46,12 +46,19 @@ export function droneGeometry(skin,body,tick=0){
 }
 export function cameraMatrix(session,aspect,distance){
   const body=session.body,offset=session.camera==='chase'?rotate(body.orientation,[0,1.5,6]):[0,0,0];
+  const eye=body.position.map((n,i)=>n+offset[i]),bounds=session.track.bounds;
+  // Pitching at ground contact can put the chase eye below the solid floor.
+  // Keep the entire near plane above it without changing the flight pose.
+  const clearance=.15*Math.hypot(1,Math.tan(Math.PI/5),Math.tan(Math.PI/5)*aspect)+.01;
+  if(eye[0]>=bounds.min[0]-clearance&&eye[0]<=bounds.max[0]+clearance&&
+     eye[2]>=bounds.min[2]-clearance&&eye[2]<=bounds.max[2]+clearance)
+    eye[1]=Math.max(eye[1],bounds.max[1]+clearance);
   return multiplyMatrices(perspective(Math.PI/2.5,aspect,.15,distance),
-    viewMatrix(body.position.map((n,i)=>n+offset[i]),body.orientation));
+    viewMatrix(eye,body.orientation));
 }
 export class RaceRenderer{
   constructor(canvas,{onMode=()=>{}}={}){
-    this.canvas=canvas;this.renderer=new OptionalRenderer(canvas,{onMode});this.track=null;this.quality='balanced';
+    this.canvas=canvas;this.renderer=new DepthRenderer(canvas,{onMode});this.track=null;this.quality='balanced';
     this.key='';this.revision=0;this.lastDraw=-Infinity;this.items=[];this.skin=BUILTIN_SKINS.skins[0];
   }
   invalidate(){this.revision++;this.key='';}
@@ -65,10 +72,9 @@ export class RaceRenderer{
     const add=(data,mode='triangles',position=null,scenery=false)=>{
       const handle=this.renderer.createMesh(data,mode);this.items.push({handle,position,scenery});return handle;
     };
-    const xs=track.gates.map(g=>g.x),zs=track.gates.map(g=>g.z);
-    const minX=Math.min(...xs)-65,maxX=Math.max(...xs)+65,minZ=Math.min(...zs)-65,maxZ=Math.max(...zs)+65;
+    const {min,max}=track.bounds,[minX,,minZ]=min,[maxX,,maxZ]=max;
     const floor=[];
-    boxGeometry(floor,[(minX+maxX)/2,-1,(minZ+maxZ)/2],[maxX-minX,2,maxZ-minZ],'#122635');
+    boxGeometry(floor,min.map((n,i)=>(n+max[i])/2),max.map((n,i)=>n-min[i]),'#122635');
     add(floor);
     const grid=[];
     for(let x=Math.ceil(minX/40)*40;x<maxX;x+=40)line(grid,[x,.02,minZ],[x,.02,maxZ],'#234354');

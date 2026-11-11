@@ -94,7 +94,7 @@ test('distributed skin and circuit starters compile to their built-in definition
   assert.deepEqual(compilePack(course),compilePack(PRESETS.neon));
 });
 test('CPU quality, skins, camera and repeated frames cannot mutate authoritative flight or race',()=>{
-  const ctx={fillRect(){},beginPath(){},moveTo(){},lineTo(){},stroke(){},fill(){},closePath(){}};
+  const ctx={fillRect(){},createImageData:(width,height)=>({width,height,data:new Uint8ClampedArray(width*height*4)}),putImageData(){}};
   const renderer=new RaceRenderer({width:320,height:180,getContext:()=>ctx});
   const s=createSession(compilePack(PRESETS.neon).track),control=createSession(s.track);
   for(let i=0;i<30;i++){
@@ -116,7 +116,7 @@ test('preferences tolerate inaccessible storage and gamepad dead zones cancel re
 test('maximum-size zigzag course keeps procedural guide meshes within donor vertex budgets',()=>{
   const gates=Array.from({length:64},(_,i)=>({id:'g'+i,x:String(i%2?4000:-4000),y:'8',z:String(i*50),width:'20',height:'14',axis:'x',direction:i%2?1:-1}));
   const track=compileRaceTrack({id:'long-zigzag',version:2,laps:1,spawn:['0','30','0'],gates,obstacles:[]});
-  const ctx={fillRect(){},beginPath(){},moveTo(){},lineTo(){},stroke(){},fill(){},closePath(){}};
+  const ctx={fillRect(){},createImageData:(width,height)=>({width,height,data:new Uint8ClampedArray(width*height*4)}),putImageData(){}};
   const renderer=new RaceRenderer({width:320,height:180,getContext:()=>ctx});
   renderer.setTrack(track,'#59ffdd');
   assert.ok([...renderer.renderer.meshes.values()].every(m=>m.data.length/6<=65536));

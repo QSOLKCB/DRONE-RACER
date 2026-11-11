@@ -6,7 +6,10 @@ has 25 gates, two laps and 2.04 km per lap; Spectral Endurance has 33 gates,
 three laps and 2.88 km per lap. Lengths are centreline approximations, not
 measurements of a pilot's flown path. Circuits have solid orange obstacles,
 solid gate beams and a ground collision slab. Legacy v1 courses retain
-non-solid gates and their historical flight/record semantics.
+non-solid gates and their existing record keys, and now also collide with
+the visible ground. Both course versions use the same compiled slab for
+physics and rendering, covering the spawn, gates and obstacles with a 65 m
+margin. Space beyond that finite slab remains outside the map.
 
 ## Authoritative simulation
 
@@ -61,7 +64,8 @@ authors should leave clearance for the largest allowed drone.
 ## Presentation and controls
 
 The original wireframe `render.js` remains as a compatibility/reference
-renderer. The game uses `scene.js` with pinned VANILLAJS `OptionalRenderer`:
+renderer. The game uses `scene.js` with a game-owned `DepthRenderer` over
+the pinned VANILLAJS `OptionalRenderer`:
 retained cuboid meshes, shaded faces, ground guidance, skyline, gate colours,
 rotating rotor blades, first-person/chase cameras and a minimap. Cosmetic
 meshes never replace the physical collision cube.
@@ -75,9 +79,12 @@ meshes never replace the physical collision cube.
 The simulation stays at 60 Hz in all presets. These are work-budget controls,
 not measured FPS guarantees. Identical paused frames are skipped. Mesh data
 is retained; gate colours update on progression, and drone geometry updates
-only for a rendered chase frame. CPU Canvas uses clipped, depth-sorted
-primitives; WebGPU uses a depth buffer. Painter ordering can differ for
-complex intersecting geometry, so full-scene pixel identity is not claimed.
+only for a rendered chase frame. CPU rendering clips primitives and tests
+depth per pixel before presenting the frame through Canvas; WebGPU uses its
+own depth buffer. This prevents large ground or obstacle faces from painting
+over nearer objects as the camera moves. Full-scene pixel identity across
+backends is not claimed. The chase camera stays above the ground slab even
+when the drone pitches or rolls near the surface.
 
 CPU is the default and requires no WASM or GPU initialization. Choosing
 WebGPU + WASM performs a capability check, instantiates local WASM for

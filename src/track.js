@@ -5,6 +5,7 @@ import {compileCourseQ16,advanceCourseQ16} from '../engine/exact-course/index.js
 import {SCALE} from '../engine/integer-math/index.js';
 import {pointToRawQ16} from './position-q16.js';
 import {compileCircuit,advanceCircuit} from './circuit.js';
+import {groundBounds} from './ground.js';
 const admitted=new WeakMap();
 export const TRACK_SOURCE=Object.freeze({
   id:'independence-sprint',version:1,
@@ -38,8 +39,9 @@ export function compileRaceTrack(authoring,title='Custom Course'){
     width:(g.rightRaw-g.leftRaw)/SCALE,
     height:(g.topRaw-g.bottomRaw)/SCALE
   })));
+  const spawn=Object.freeze([0,3,5]),bounds=groundBounds(gates,spawn);
   const track=Object.freeze({id:c.id,version:c.version,title,gates,laps:1,
-    spawn:Object.freeze([0,3,5]),obstacles:Object.freeze([]),boxes:Object.freeze([])});
+    spawn,obstacles:Object.freeze([]),boxes:Object.freeze([bounds]),bounds});
   admitted.set(track,c);
   return track;
 }

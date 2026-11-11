@@ -6,6 +6,7 @@ import {createServer} from 'node:http';
 import {readFile,writeFile} from 'node:fs/promises';
 import {resolve,sep,extname} from 'node:path';
 import {checkRendererParity} from './renderer-parity.mjs';
+import {checkGroundAndVisibility} from './ground-visibility-check.mjs';
 const require=createRequire(import.meta.url);
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const root=resolve('_site');
@@ -87,7 +88,8 @@ try{
   await mobile.close();
   assert.deepEqual(errors,[]);
   const parity=await checkRendererParity(page);
-  const report={browser:await browser.version(),ui:'PASS',errors,parity};
+  const groundAndVisibility=await checkGroundAndVisibility(page);
+  const report={browser:await browser.version(),ui:'PASS',errors,parity,groundAndVisibility};
   if(process.env.DRONE_BROWSER_REPORT)await writeFile(process.env.DRONE_BROWSER_REPORT,JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify(report,null,2));
 }finally{await browser?.close();await new Promise(r=>server.close(r));}
