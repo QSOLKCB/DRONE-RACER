@@ -17,3 +17,12 @@ No self-hosted runner, paid API, forced pushes, release or tags are needed.
 ## Destructive build destination guard
 
 The build script accepts only a dedicated root-level `_site` or `_site-<suffix>` output directory, and rejects source, `.git`, `docs`, parent paths and nested destinations before deletion. A pre-existing output must be a real directory with a complete matching, SHA-256-verified site manifest; an unknown directory, symlink, missing or corrupt inventory, or extra file is never recursively removed. Unit tests exercise the builder against disposable synthetic repositories and check that metadata/source sentinels survive rejection.
+
+
+## DRONE-002 source/math and modding gates
+
+The extended test suite validates SHA-1 Git blob provenance for vendored ALIEN MATH source, exact gate admission, multi-gate sweeps, Float64 quantization via independent Python `fractions.Fraction.from_float`, malformed data-only packs, preservation of the baseline flight kernel and chase view noninterference.
+
+The Python oracle is finite conformance evidence, not mathematical source refinement. GPU, Canvas pixel identity across browsers, new hardware acceleration, online mod security and universal physics determinism are not claimed.
+
+Review [ALIEN_MATH_DRONE_002.md](ALIEN_MATH_DRONE_002.md) for the numerical trust boundary, [MOD_GUIDE.md](MOD_GUIDE.md) for supported mod fields, and [HOW_TO_MAKE_A_DRONE_GAME.md](HOW_TO_MAKE_A_DRONE_GAME.md) for the reusable architecture.

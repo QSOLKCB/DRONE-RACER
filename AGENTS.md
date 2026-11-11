@@ -8,3 +8,7 @@
 - Always run Node regression, allowlisted build, and SHA-256 package verification for implementation PRs.
 - No merge, tag, release, GitHub Pages manual branch bypass, or self-hosted GPU without explicit owner approval.
 - Preserve the motto: **This is not a product. This is INDEPENDENCE.**
+
+- DRONE-002 preserves source-pinned Float64 flight; exact compiled Q16.16 gates and deliberate Float64-to-raw admission are independent authoring/checkpoint contracts.
+- Mod packs are data-only strict JSON with bounded input size; no eval, remote code loading, arbitrary asset URLs or trusted-code sandbox claim.
+- Do not weaken source-pinned provenance tests or replace earlier best-time keys. Keep a strict new-invariant check when adding mod/game features.

@@ -56,19 +56,42 @@ export function drawScene(canvas,session){
   bg.addColorStop(0,'#080e1e');bg.addColorStop(1,'#102530');
   ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
   const body=session.body;
+  const chase=session.camera==='chase';
+  const offset=chase?rotate(body.orientation,[0,1.5,6]):[0,0,0];
+  const eye=chase?{
+    position:body.position.map((v,i)=>v+offset[i]),
+    orientation:body.orientation
+  }:body;
   ctx.save();ctx.lineJoin='round';ctx.lineCap='round';
   for(let z=-20;z>-360;z-=20){
-    stroke3(ctx,body,[[-24,0,z],[24,0,z]],w,h,'#1a4050',1);
-    for(const x of [-24,24])stroke3(ctx,body,[[x,0,z],[x,0,z-20]],w,h,'#143544',1);
+    stroke3(ctx,eye,[[-24,0,z],[24,0,z]],w,h,'#1a4050',1);
+    for(const x of [-24,24])stroke3(ctx,eye,[[x,0,z],[x,0,z-20]],w,h,'#143544',1);
   }
   for(let i=session.track.gates.length-1;i>=0;i--){
     const g=session.track.gates[i],a=g.x-g.width/2,b=g.x+g.width/2;
     const low=g.y-g.height/2,top=g.y+g.height/2;
     const active=i===session.race.nextGate;
-    const color=i<session.race.nextGate?'#426475':active?'#59ffdd':'#287f9c';
-    stroke3(ctx,body,[[a,low,g.z],[a,top,g.z],[b,top,g.z],[b,low,g.z],[a,low,g.z]],w,h,color,active?4:2);
-    const p=project(body,[g.x,g.y,g.z],w,h);
+    const color=i<session.race.nextGate?'#426475':active?(session.accent??'#59ffdd'):'#287f9c';
+    stroke3(ctx,eye,[[a,low,g.z],[a,top,g.z],[b,top,g.z],[b,low,g.z],[a,low,g.z]],w,h,color,active?4:2);
+    const p=project(eye,[g.x,g.y,g.z],w,h);
     if(p&&p[2]<300){ctx.fillStyle=color;ctx.font='bold 14px monospace';ctx.textAlign='center';ctx.fillText(g.id,p[0],p[1]-8);}
+  }
+  if(chase){
+    // First-person simulation unchanged; draw a small drone silhouette from
+    // its pose only. Camera rendering is not part of checkpoint authority.
+    const toWorld=p=>rotate(body.orientation,p).map((v,i)=>v+body.position[i]);
+    for(const path of [
+      [[-0.8,0,-0.65],[0,0,0],[0.8,0,-0.65]],
+      [[-0.8,0,0.65],[0,0,0],[0.8,0,0.65]],
+      [[0,0,-0.65],[0,0,0.65]]
+    ])stroke3(ctx,eye,path.map(toWorld),w,h,session.droneColor??'#a8ffdf',5);
+    for(const x of [-0.8,0.8])for(const z of [-0.65,0.65]){
+      const points=Array.from({length:13},(_,i)=>{
+        const theta=i*Math.PI/6;
+        return toWorld([x+0.3*Math.cos(theta),0,z+0.3*Math.sin(theta)]);
+      });
+      stroke3(ctx,eye,points,w,h,session.accent??'#59ffdd',2);
+    }
   }
   ctx.strokeStyle='#77e9d1';ctx.lineWidth=1.5;ctx.beginPath();
   ctx.arc(w/2,h/2,15,0,Math.PI*2);

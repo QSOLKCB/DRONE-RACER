@@ -16,3 +16,15 @@ Conventions: +Y up, -Z forward, right-handed, xyzw quaternions. The current cour
 Floating-point VANILLAJS `flight` dynamics are not proof of bit-exact cross-browser physics. Race timing is an integer count of simulation ticks. The local record is not a tamper-proof leaderboard. Exact ALIEN MATH authoring is future independently verified work.
 
 The pinned engine SHA is in [VANILLAJS source identity](../engine/VANILLAJS_SOURCE.md). Any engine update must be separately reviewed with affected regressions. All runtime source and images are local; no CDN imports.
+
+
+## DRONE-002 additions
+
+- `engine/exact-{rational,course}`, `engine/rational-q16` and `engine/integer-math` copy reviewed VANILLAJS ALIEN MATH from the separate pinned upstream commit recorded in `engine/VANILLAJS_SOURCE.md`.
+- `src/track.js` now compiles exact decimal strings and uses the admitted ALIEN MATH raw Q16.16 gate classifier for race advancement.
+- `src/position-q16.js` implements the explicit exact-binary64-to-Q16.16 truncation boundary before calling the integer gate classifier.
+- `src/mods.js` validates data-only, finite drone/course packs. Imported packs are bounded to 32 KiB; they do not execute user JavaScript.
+- `src/render.js` adds an optional chase camera and procedural drone colour without changing simulation or results.
+- `src/main.js` handles local import, selection and save-key isolation.
+
+The 001 flight module is **not** replaced by the ALIEN MATH exact course module. For numerical semantics and independent Python evidence, read [ALIEN_MATH_DRONE_002.md](ALIEN_MATH_DRONE_002.md). For what users can edit, read [MOD_GUIDE.md](MOD_GUIDE.md).
