@@ -26,3 +26,7 @@ The extended test suite validates SHA-1 Git blob provenance for vendored ALIEN M
 The Python oracle is finite conformance evidence, not mathematical source refinement. GPU, Canvas pixel identity across browsers, new hardware acceleration, online mod security and universal physics determinism are not claimed.
 
 Review [ALIEN_MATH_DRONE_002.md](ALIEN_MATH_DRONE_002.md) for the numerical trust boundary, [MOD_GUIDE.md](MOD_GUIDE.md) for supported mod fields, and [HOW_TO_MAKE_A_DRONE_GAME.md](HOW_TO_MAKE_A_DRONE_GAME.md) for the reusable architecture.
+
+## DRONE-002 record identity and keyboard accessibility regressions
+
+Imported records are scoped by pack ID and SHA-256 of validated, parsed JSON. Only the built-in default selection may access the original sprint best-time key; imported packs with the same public ID, short courses, reskins or different performance stats receive separate storage keys. Focused inputs/selects retain native arrow/Space and editing behavior, and global flight shortcuts do not run while those controls have focus. Both distributable example JSON packs must compile and match their built-in source configurations.

@@ -72,11 +72,17 @@ test('built-in mods and imported course examples compile without executable capa
  assert.equal(b.drone.name,'Spectral Wasp');
  assert.notEqual(a.accent,b.accent);
  assert.notEqual(a.track.id,b.track.id);
- const ex=JSON.parse(await readFile(new URL('../mods/examples/independence-scout.json',import.meta.url),'utf8'));
- const pack=compilePack(ex);
- assert.equal(pack.track.id,a.track.id);
- assert.equal(pack.drone.name,a.drone.name);
- assert.deepEqual(pack.track.gates,a.track.gates);
+ for(const [name,expected] of [
+   ['independence-scout',a],['spectrum-dash',b]]){
+   const raw=JSON.parse(await readFile(new URL('../mods/examples/'+name+'.json',import.meta.url),'utf8'));
+   const imported=compilePack(raw);
+   assert.equal(imported.track.id,expected.track.id);
+   assert.equal(imported.drone.name,expected.drone.name);
+   assert.deepEqual(imported.track.gates,expected.track.gates,
+     name+' example must match built-in gate geometry');
+   assert.deepEqual(imported.drone,expected.drone,
+     name+' example must match built-in drone config');
+ }
 });
 test('untrusted or malformed packs fail closed, with no code loading',()=>{
  const good=clone(DEFAULT_PACK);

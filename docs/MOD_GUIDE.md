@@ -8,7 +8,7 @@ DRONE-002 implements a working **data-only JSON pack format** for drone flight p
 
 Download `mods/examples/independence-scout.json`, copy it to `my-drone.json`, and edit the copy. Alternatively use **Download example pack** in the game. Open the game's **Import JSON** selector and select the edited file. It validates and compiles the entire pack before changing the active race; a rejected file leaves the last working pack intact. The maximum import size is **32 KiB**. Imported packs are in-memory only: reselect the file after reload.
 
-The pack must contain exactly `kind`, `id`, `version`, `title`, `accent`, `drone` and `course`. The kind is `qsol.drone-racer.pack.v1` and version is `1`. Give each mod a distinct lowercase slug as its ID. Unknown keys or unsupported versions fail closed.
+The pack must contain exactly `kind`, `id`, `version`, `title`, `accent`, `drone` and `course`. The kind is `qsol.drone-racer.pack.v1` and version is `1`. Give each mod a distinct lowercase slug as its ID. Imported configurations use an isolated SHA-256 content-derived record key, so even a custom pack that reuses `independence-sprint` can never overwrite the original sprint's best time. Changes to course or drone data create a separate record. Web Crypto SHA-256 is required for persistent imported records and works on GitHub Pages HTTPS and loopback localhost. Unknown keys or unsupported versions fail closed.
 
 ## Reskin the drone
 

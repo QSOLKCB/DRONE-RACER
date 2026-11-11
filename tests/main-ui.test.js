@@ -100,3 +100,31 @@ test('keyboard resume also discards suspended time',async()=>{
     assert.match(nodes.get('#hud').textContent,/0\.10s/);
   });
 });
+
+
+test('focused select and text inputs preserve native keyboard input and never fly',async()=>{
+  await withGame('focused-controls',({nodes,handlers,advance})=>{
+    nodes.get('#restart').fire('click');
+    advance(100);
+    const hud=nodes.get('#hud');
+    assert.match(hud.textContent,/0\.10s/);
+    const control={closest(selector){
+      assert.match(selector,/select/);
+      return this;
+    }};
+    const focus=handlers.get('focusin');
+    assert.equal(typeof focus,'function','focus handler must cancel held flight inputs');
+    focus({target:control});
+    for(const code of ['ArrowDown','ArrowUp','ArrowLeft','ArrowRight',
+      'Space','KeyR','KeyM','KeyT','KeyP']){
+      let prevented=false;
+      handlers.get('keydown')({code,repeat:false,target:control,
+        preventDefault(){prevented=true;}});
+      assert.equal(prevented,false,code+' native control behavior must remain intact');
+    }
+    advance(100);
+    assert.match(hud.textContent,/0\.20s/,'R and P must not reset or pause the race');
+    assert.match(hud.textContent,/ASSISTED/,'M must not change mode in a select');
+    assert.match(hud.textContent,/0\.0 m\/s/,'arrow keys must not steer the drone');
+  });
+});

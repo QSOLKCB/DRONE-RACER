@@ -3,21 +3,19 @@ import {FixedClock} from '../engine/time/index.js';
 import {createSession,setFlightMode,stepSession,secondsFromTicks,STEP} from './game.js';
 import {drawScene} from './render.js';
 import {compilePack,DEFAULT_PACK,SPECTRUM_PACK} from './mods.js';
+import {presetRecordKey,importedRecordKey} from './records.js';
 const canvas=document.querySelector('#flight'),hud=document.querySelector('#hud'),notice=document.querySelector('#notice');
 const startButton=document.querySelector('#restart'),pauseButton=document.querySelector('#pause');
 const modeButton=document.querySelector('#mode'),overlay=document.querySelector('#overlay');
 const keys=new Set(),touch=new Set(),clock=new FixedClock({step:STEP,maxFrame:.12,maxSteps:6});
 const KEY='qsol.drone-racer.independence-sprint.v1.bestTicks';
 let session,started=false,paused=true,previous=performance.now(),lastGate=0;
-let activePack=compilePack(DEFAULT_PACK),importGeneration=0;
+let activePack=compilePack(DEFAULT_PACK),activeRecordKey=presetRecordKey('default'),importGeneration=0;
 const packSelect=document.querySelector('#pack-select');
 const packUpload=document.querySelector('#pack-upload');
 const packStatus=document.querySelector('#pack-status');
 const viewButton=document.querySelector('#view-mode');
-function bestKey(){
-  return activePack.id==='independence-sprint'?KEY:
-    'qsol.drone-racer.pack.'+activePack.id+'.v1.bestTicks';
-}
+function bestKey(){return activeRecordKey;}
 function best(){
   try{const raw=localStorage.getItem(bestKey());if(raw===null)return null;
     const n=Number(raw);return Number.isSafeInteger(n)&&n>0?n:null;
@@ -63,8 +61,9 @@ function command(){
     turn:[axis('ArrowDown','ArrowUp'),axis('ArrowLeft','ArrowRight'),axis('KeyC','KeyV')],
     brake:down('Space')};
 }
-function applyPack(pack){
-  activePack=pack;
+function applyPack(pack,recordKey){
+  if(typeof recordKey!=='string'||!recordKey)throw new TypeError('record identity required');
+  activePack=pack;activeRecordKey=recordKey;
   if(packStatus)packStatus.textContent=pack.title+' · verified local data pack';
   if(started)reset();
   else{
@@ -84,7 +83,16 @@ function mode(){
   setFlightMode(session,!session.assisted);
   modeButton.textContent='Mode: '+(session.assisted?'Assisted':'Inertial');updateHUD();
 }
+function isFormControl(target){
+  return Boolean(target?.closest?.('input,select,textarea,button,[contenteditable]'));
+}
+document.addEventListener('focusin',e=>{
+  if(isFormControl(e.target))clearInputs();
+});
 document.addEventListener('keydown',e=>{
+  // Do not steal Arrow/Space or global flight shortcuts from native controls.
+  // Focusing a control also cancels previously held flight input.
+  if(isFormControl(e.target??document.activeElement))return;
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
   if(e.repeat)return;
   if(e.code==='KeyR'){reset();return;}
@@ -109,8 +117,8 @@ modeButton.addEventListener('click',mode);
 if(viewButton)viewButton.addEventListener('click',cameraMode);
 if(packSelect)packSelect.addEventListener('change',()=>{
   importGeneration++;
-  if(packSelect.value==='default')applyPack(compilePack(DEFAULT_PACK));
-  else if(packSelect.value==='spectrum')applyPack(compilePack(SPECTRUM_PACK));
+  if(packSelect.value==='default')applyPack(compilePack(DEFAULT_PACK),presetRecordKey('default'));
+  else if(packSelect.value==='spectrum')applyPack(compilePack(SPECTRUM_PACK),presetRecordKey('spectrum'));
 });
 if(packUpload)packUpload.addEventListener('change',async()=>{
   const file=packUpload.files?.[0],generation=++importGeneration;
@@ -120,7 +128,10 @@ if(packUpload)packUpload.addEventListener('change',async()=>{
     const source=JSON.parse(await file.text());
     if(generation!==importGeneration)return;
     const pack=compilePack(source);
-    applyPack(pack);
+    const recordKey=await importedRecordKey(pack.id,source);
+    // A newer import or preset choice wins; no late async activation.
+    if(generation!==importGeneration)return;
+    applyPack(pack,recordKey);
     if(packSelect)packSelect.value='custom';
   }catch(error){
     if(generation===importGeneration&&packStatus)
