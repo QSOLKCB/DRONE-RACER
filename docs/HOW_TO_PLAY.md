@@ -1,32 +1,60 @@
-# DRONE-RACER — how to play
+# Flying the Independence Circuit
 
-Open [GitHub Pages](https://qsolkcb.github.io/DRONE-RACER/) or serve a local clone:
+Serve the repository or built `_site` over HTTP, then open the game. Select a
+course, pick a skin, and press **Start race**. No account or runtime network
+connection is needed. Hosted offline *reload* is not a service-worker feature;
+keep a local copy and local static server for offline use.
 
-    uv run --no-project python -m http.server 8080 --bind 127.0.0.1
+| Course | Gates per lap | Laps | Approximate distance per lap |
+| --- | --- | --- | --- |
+| Neon Harbour | 17 | 3 | 1.28 km |
+| Foundry Run | 25 | 2 | 2.04 km |
+| Spectral Endurance | 33 | 3 | 2.88 km |
+| Independence Sprint | 6 | 1 | Original sprint |
+| Spectrum Dash | 6 | 1 | Original sprint |
 
-Click **START RACE** and pass each highlighted rectangular gate, in order, moving toward world -Z. The game uses swept checkpoints, so a fast crossing cannot be lost between simulation ticks.
+Fly through the bright gate in its indicated direction. Follow the ground
+arrows and minimap; the top-left guide points towards your next gate. Clear
+every gate to complete each lap. Brake before corners. Circuits have solid
+gate frames and orange obstacles. A contact tick withholds checkpoint credit,
+so re-approach any gate you crossed while colliding.
 
-| Key | Action |
+| Input | Action |
 | --- | --- |
-| W/S | Forward/reverse thrust |
-| A/D | Left/right strafe |
-| Q/E | Down/up thrust |
-| Arrow keys | Pitch/yaw |
-| C/V | Roll |
-| Space | Brake |
-| M | Assisted/inertial toggle |
-| P | Pause/resume |
-| R | Restart |
+| W / S | Forward / reverse thrust |
+| A / D | Strafe left / right |
+| Q / E | Descend / climb |
+| Arrow keys | Pitch / yaw |
+| C / V | Roll |
+| Space | Brake translation and rotation |
+| M | Assisted / inertial flight |
+| T | FPV / chase camera |
+| P / Escape | Pause-toggle / pause |
+| R | Restart selected course |
+| B | Recover to last checkpoint, with a five-second penalty |
 
-Touch buttons give a simpler forward/strafe/yaw/brake layout. The first demo is primarily keyboard-oriented; full mobile controller ergonomics and gamepad support remain planned.
+Assisted flight is easier to control. Inertial flight preserves momentum;
+there is no universal speed guarantee or bit-exact physics replay. Recover
+also zeros momentum and aims at the next gate. Final results show lap splits,
+recoveries and your local course best time. Choosing another course restarts
+an active race. Cosmetics can change without resetting the race.
 
-The race currently has no collision walls, gates as solid meshes, ranked server, damage, cloud sync, AI pilots or drone upgrades. Leaving the track is possible. Losing window focus clears input and pauses the game.
+Standard gamepads use left stick for horizontal flight, right stick for aim,
+triggers for elevation, bumpers for roll and the bottom face button for brake.
+A dead zone ignores resting sticks. Touch devices expose thrust, reverse,
+strafe, elevation, pitch, yaw, roll and brake buttons.
 
+Opening **Flight settings**, losing focus or hiding the tab pauses the race.
+Resume does not charge paused wall time. Form controls retain normal keyboard
+behaviour; click the course canvas or use a race button to return to flight.
 
-## DRONE-002 controls and mods
+CPU rendering is the default. Eco lowers rendering work and caps it at 30 fps;
+Balanced and High cap rendering at 60 fps. All keep 60 Hz simulation. WebGPU +
+WASM is optional and falls back to CPU if unavailable. Fullscreen expands the
+cockpit. Actual frame rate depends on the device.
 
-Use **View: Chase** or press **T** to switch between FPV and a procedural third-person drone. Switch between **Independence Scout** and **Spectral Wasp** from the Mod Kit. Changing packs resets the race safely; each pack has its own best-time record.
-
-Click **Download example pack**, edit the resulting JSON offline, then **Import JSON** to validate and play the new track/drone. Invalid packs do not replace a running, validated pack. See [Mod Guide](MOD_GUIDE.md).
-
-The active race now uses ALIEN MATH Q16.16 compiled gate boundaries. This does not make the Float64 flight simulation itself bit-exact across browsers.
+Choose **Sound: On** to start synthesized motor/race cues and optional music.
+Volume and music are configurable; pause cancels queued sound. **Export tick
+sound log** downloads the reproducible event stream even when playback was
+off. Skin/course export buttons download editable JSON starters; see the
+[mod guide](MOD_GUIDE.md). Settings and best times are local to this browser.

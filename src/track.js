@@ -4,6 +4,7 @@
 import {compileCourseQ16,advanceCourseQ16} from '../engine/exact-course/index.js';
 import {SCALE} from '../engine/integer-math/index.js';
 import {pointToRawQ16} from './position-q16.js';
+import {compileCircuit,advanceCircuit} from './circuit.js';
 const admitted=new WeakMap();
 export const TRACK_SOURCE=Object.freeze({
   id:'independence-sprint',version:1,
@@ -25,6 +26,10 @@ export function validateTrack(track){
 export function compileRaceTrack(authoring,title='Custom Course'){
   if(typeof title!=='string'||title.length<1||title.length>80)
     throw new TypeError('bounded track title required');
+  // Inspect the descriptor without executing a source-owned getter.
+  if(Object.getOwnPropertyDescriptor(authoring??{},'version')?.value===2){
+    const track=compileCircuit(authoring,title);admitted.set(track,null);return track;
+  }
   const c=compileCourseQ16(authoring,{rounding:'exact',overflow:'reject'});
   const gates=Object.freeze(c.gates.map(g=>Object.freeze({
     id:g.id,x:(g.leftRaw+g.rightRaw)/(2*SCALE),
@@ -33,7 +38,8 @@ export function compileRaceTrack(authoring,title='Custom Course'){
     width:(g.rightRaw-g.leftRaw)/SCALE,
     height:(g.topRaw-g.bottomRaw)/SCALE
   })));
-  const track=Object.freeze({id:c.id,version:c.version,title,gates});
+  const track=Object.freeze({id:c.id,version:c.version,title,gates,laps:1,
+    spawn:Object.freeze([0,3,5]),obstacles:Object.freeze([]),boxes:Object.freeze([])});
   admitted.set(track,c);
   return track;
 }
@@ -54,21 +60,31 @@ export function gateCrossing(from,to,gate,margin=0.35){
 export function newRace(bestTicks=null){
   if(bestTicks!==null&&(!Number.isSafeInteger(bestTicks)||bestTicks<=0))
     throw new RangeError('invalid best time');
-  return {status:'running',ticks:0,nextGate:0,finishedTicks:null,bestTicks};
+  return {status:'running',ticks:0,nextGate:0,finishedTicks:null,bestTicks,
+    completedLaps:0,lapStartedTicks:0,lapTimes:[],clearedGates:0,penaltyTicks:0,recoveries:0,tickEvents:[]};
 }
 /** Authoritative ordered gate adjudication over deliberately quantized flight poses. */
 export function advanceRace(race,from,to,track=TRACK){
   const compiled=admitted.get(validateTrack(track));
   if(race.status!=='running')return {...race};
   if(!Number.isSafeInteger(race.ticks)||race.ticks<0||
-    !Number.isSafeInteger(race.nextGate)||race.nextGate<0)
+    !Number.isSafeInteger(race.nextGate)||race.nextGate<0||race.nextGate>=track.gates.length)
     throw new TypeError('invalid race state');
-  const result=advanceCourseQ16(compiled,race.nextGate,
-    pointToRawQ16(from),pointToRawQ16(to));
-  const next={...race,ticks:race.ticks+1,nextGate:result.nextGate};
-  if(result.finished){
-    next.status='finished';next.finishedTicks=next.ticks;
-    next.bestTicks=next.bestTicks===null?next.ticks:Math.min(next.bestTicks,next.ticks);
+  const result=track.version===2?advanceCircuit(race,from,to,track):
+    advanceCourseQ16(compiled,race.nextGate,pointToRawQ16(from),pointToRawQ16(to));
+  const next={...race,ticks:race.ticks+1,nextGate:result.nextGate,
+    clearedGates:race.clearedGates+result.crossed};
+  const events=result.events??Array.from({length:result.crossed},(_,i)=>({type:'gate',index:race.clearedGates+i+1}));
+  if(track.version===1&&result.finished)events.push({type:'finish',index:1});
+  next.tickEvents=events.map(e=>({...e,tick:next.ticks}));
+  if(result.lapCompleted||result.finished){
+    next.completedLaps++;
+    next.lapTimes=[...race.lapTimes,next.ticks-race.lapStartedTicks];
+    next.lapStartedTicks=next.ticks;
+    if(result.finished){
+      next.status='finished';next.finishedTicks=next.ticks;
+      next.bestTicks=next.bestTicks===null?next.ticks:Math.min(next.bestTicks,next.ticks);
+    }
   }
   return next;
 }

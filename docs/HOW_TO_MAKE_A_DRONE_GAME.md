@@ -38,3 +38,13 @@ The chase camera places the viewer behind the same simulated body, then projects
 Use the game's existing CI and GitHub Pages branch gate. Add tests to protect both your gameplay and packaging semantics. Do not invent speedups or GPU certifications.
 
 References: [VANILLAJS](https://github.com/QSOLKCB/VANILLAJS), [ALIEN Course Foundry](https://qsolkcb.github.io/VANILLAJS/demos/alien-course-lab/index.html), [OFFLINE-GAMES](https://github.com/QSOLKCB/OFFLINE-GAMES), [INDEPENDENCE](https://github.com/QSOLKCB/INDEPENDENCE).
+
+## DRONE-003 circuit example
+
+The new `src/circuit.js` does **not** reinterpret the old decreasing −Z bridge.
+It admits a versioned X/Z cardinal course with BigInt swept intersections,
+strict within-sweep chronology and continuing lap transitions. See
+[the exact circuit contract](CIRCUITS_AND_PRESENTATION.md) before extending it.
+Use [the JSON skin/course guide](MOD_GUIDE.md) for game-owned cosmetic parts
+and obstacles. The renderer/audio donors remain unchanged, source-pinned
+VANILLAJS modules; simulation, collision and logs never read rendered pixels.

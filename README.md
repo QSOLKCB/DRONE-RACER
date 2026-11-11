@@ -10,7 +10,38 @@ An offline-first 6DOF drone racing demonstration built with pinned VANILLAJS eng
 <p align="center"><strong>This is not a product. This is INDEPENDENCE. 👽</strong></p>
 <p align="center"><a href="https://qsolkcb.github.io/DRONE-RACER/"><strong>PLAY THE DEMO</strong></a> · <a href="docs/HOW_TO_PLAY.md">CONTROLS</a> · <a href="ROADMAP.md">ROADMAP</a> · <a href="docs/ARCHITECTURE.md">ARCHITECTURE</a></p>
 
-## DRONE-002 — ALIEN MATH, custom drone packs and chase view
+## DRONE-003 — Independence Circuit
+
+- **Three long circuits:** Neon Harbour (17 gates × 3 laps), Foundry Run
+  (25 × 2), and Spectral Endurance (33 × 3), with 1.28–2.88 km per lap.
+- **A separate v2 checkpoint contract:** exact Q16.16 X/Z planes, both
+  directions, chronological BigInt sweeps and within-tick lap transitions.
+  The original decreasing −Z ALIEN MATH bridge and Float64 flight stay pinned.
+- **Solid obstacles and gate frames**, tick-based lap splits, five-second
+  checkpoint recovery, minimap, directional guidance and a finish panel.
+- **Solid procedural visuals and six cosmetic skins**, plus a validated JSON
+  skin pack for editing colours, cuboid bodies and animated rotors.
+- **CPU Eco/Balanced/High** and an opt-in **WebGPU + WASM** presentation path,
+  retained meshes, idle-frame reuse and automatic CPU fallback.
+- **Deterministic tick-indexed sound events and integer PCM cues**, with
+  procedural music, volume/mute, pause cancellation and downloadable event logs.
+- Persistent preferences, fullscreen, gamepad support, complete touch controls,
+  active-pack export and responsive desktop/mobile layout.
+
+[Play](https://qsolkcb.github.io/DRONE-RACER/) ·
+[Controls](docs/HOW_TO_PLAY.md) · [Skin/course mod guide](docs/MOD_GUIDE.md) ·
+[Architecture and numerical contract](docs/CIRCUITS_AND_PRESENTATION.md) ·
+[Verification](docs/VERIFICATION.md)
+
+**Boundaries:** v2 gates are cardinal X/Z planes, not arbitrary rotations.
+Contact ticks conservatively earn no checkpoint, even for a crossing before
+impact. Reference PCM and event logs are deterministic; live device output
+and Float64 flight have no cross-browser bit-identity claim. GPU tests use a
+software adapter and offscreen texture; no physical GPU speedup is claimed.
+The full future VANILLAJS Mod SDK, ghost trials and online rankings remain
+future work. Existing CI deploys after an owner-reviewed merge.
+
+## DRONE-002 baseline — ALIEN MATH, custom drone packs and chase view
 
 - **Gates now use reviewed VANILLAJS ALIEN MATH**: exact decimal-string course source, explicit `rounding:'exact', overflow:'reject'` Q16.16 compilation and widened BigInt swept checkpoint decisions.
 - **Float64 flight remains unchanged**: an explicit IEEE-754 → checked Q16.16 truncation step is independently compared against Python `fractions.Fraction.from_float`. No cross-browser bit-exact flight claim.
@@ -21,7 +52,7 @@ An offline-first 6DOF drone racing demonstration built with pinned VANILLAJS eng
 
 [Play DRONE-RACER](https://qsolkcb.github.io/DRONE-RACER/) · [Mod/Reskin Guide](docs/MOD_GUIDE.md) · [Build your own drone game](docs/HOW_TO_MAKE_A_DRONE_GAME.md) · [ALIEN MATH contract](docs/ALIEN_MATH_DRONE_002.md) · [Upstream ALIEN Course Foundry](https://qsolkcb.github.io/VANILLAJS/demos/alien-course-lab/index.html)
 
-**Scope:** The working Mod Kit is data-only, not the full future VANILLAJS Mod SDK. Longer looping tracks, arbitrary rotated hoops, realistic obstacles, sampled music and texture/mesh modding remain planned.
+**Historical DRONE-002 scope:** its mod kit supplied data-only sprints and colour reskins. DRONE-003 adds the circuits, obstacles, generated audio and procedural skin parts described above. External textures, arbitrary meshes and executable modding remain unsupported.
 
 ## Original DRONE-001 baseline (preserved)
 
@@ -47,6 +78,10 @@ Node 22 is used only for development, not to play:
     node --test tests/*.test.js
     node scripts/site.mjs build _site
     node scripts/site.mjs verify _site
+
+Browser CI also runs `node scripts/browser-check.mjs` against the packaged site,
+using isolated Playwright tooling and software WebGPU. See the verification
+guide for local tooling variables and the numerical/pixel tolerance contracts.
 
 GitHub Actions checks pull requests and deploys the rebuilt site after successful `main` pushes, including merges. Manual deployment is restricted to `main`. Configure Settings → Pages → **Source: GitHub Actions**. Live URL: https://qsolkcb.github.io/DRONE-RACER/
 

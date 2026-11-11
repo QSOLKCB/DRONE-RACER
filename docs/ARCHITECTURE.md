@@ -28,3 +28,16 @@ The pinned engine SHA is in [VANILLAJS source identity](../engine/VANILLAJS_SOUR
 - `src/main.js` handles local import, selection and save-key isolation.
 
 The 001 flight module is **not** replaced by the ALIEN MATH exact course module. For numerical semantics and independent Python evidence, read [ALIEN_MATH_DRONE_002.md](ALIEN_MATH_DRONE_002.md). For what users can edit, read [MOD_GUIDE.md](MOD_GUIDE.md).
+
+## DRONE-003 additions
+
+The game now uses `scene.js` over pinned VANILLAJS `render-optional`; the
+original `render.js` remains a compatibility/reference renderer. `circuit.js`
+is a separate cardinal v2 checkpoint representation; `track.js` retains the
+original v1 bridge and adds lap timing/dispatch. `skins.js` validates cosmetic
+JSON without changing flight configuration. `audio.js` separates tick events,
+integer PCM reference cues and cancellable Web Audio presentation.
+
+Read [the circuit/presentation contract](CIRCUITS_AND_PRESENTATION.md) for the
+exact lap-boundary policy, conservative obstacle-contact limitation, source
+pins, event-log profile and independently tested numerical/pixel boundaries.

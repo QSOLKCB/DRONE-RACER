@@ -1,5 +1,8 @@
 # Modding DRONE-RACER
 
-**DRONE-002 now has a working data-only Mod Kit.** Read [the Mod Guide](MOD_GUIDE.md) for importing locally edited JSON, colour reskins, flight presets, exact Q16 gate tracks and limitations.
+Use the [working skin and course mod guide](MOD_GUIDE.md) for the current
+DRONE-003 data-only formats, import/export controls, limits and starters.
 
-The general VANILLAJS Mod SDK, trusted executable JavaScript extensions, advanced assets, track editing and custom gameplay scripts remain future projects. **This is not a product. This is INDEPENDENCE.**
+Use [the circuit contract](CIRCUITS_AND_PRESENTATION.md) for exact checkpoint,
+lap, obstacle-contact, rendering and audio boundaries. Arbitrary executable
+extensions and the full future VANILLAJS Mod SDK remain outside this format.
