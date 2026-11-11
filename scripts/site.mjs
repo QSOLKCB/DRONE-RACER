@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-import {mkdir,rm,cp,readdir,readFile,writeFile} from 'node:fs/promises';
+import {mkdir,rm,cp,readdir,readFile,writeFile,lstat} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {join,resolve,relative,sep} from 'node:path';
 const root=resolve(import.meta.dirname,'..'),allow=['index.html','styles.css','src','engine','docs/assets'];
@@ -22,9 +22,32 @@ async function main(){
   if(!['build','verify'].includes(action)||!target||target==='.'||target==='..'||
      !/^[a-zA-Z0-9._/-]+$/.test(target)||target.split('/').includes('..')||
      target.startsWith('/'))throw new Error('usage: node scripts/site.mjs build|verify _site');
+  // Build removes its destination recursively: accept ONLY dedicated output
+  // names under the repository root, never source, docs, .git or a child path.
+  // Alternate isolated build names are useful for disposable CI fixtures.
+  if(!/^_site(?:-[A-Za-z0-9_-]{1,40})?$/.test(target))
+    throw new Error('unsafe output: use _site or _site-<suffix>');
   const out=resolve(root,target);
-  if(!out.startsWith(root+sep))throw new Error('unsafe output');
   if(action==='build'){
+    // A previous output must be a genuine, complete build we own. Refuse
+    // symlinks, unknown existing directories, corrupt manifests and stray files
+    // BEFORE the first rm(). Never recursively delete arbitrary user data.
+    let stat;
+    try{stat=await lstat(out);}catch(e){if(e.code!=='ENOENT')throw e;}
+    if(stat){
+      if(!stat.isDirectory()||stat.isSymbolicLink())
+        throw new Error('unsafe output: existing target is not a directory');
+      let marker;
+      try{
+        const st=await lstat(join(out,'manifest.json'));
+        if(!st.isFile()||st.isSymbolicLink())throw new Error('untrusted manifest');
+        marker=JSON.parse(await readFile(join(out,'manifest.json'),'utf8'));
+      }catch{throw new Error('unsafe output: existing directory is not a verified site');}
+      const existing=(await inventory(out)).filter(f=>f.path!=='manifest.json');
+      if(marker.kind!=='qsol.drone-racer.offline.v1'||
+         JSON.stringify(marker.files)!==JSON.stringify(existing))
+        throw new Error('unsafe output: existing site inventory mismatch');
+    }
     await rm(out,{recursive:true,force:true});await mkdir(out,{recursive:true});
     for(const item of allow)await cp(join(root,item),join(out,item),{recursive:true});
     const files=await inventory(out);

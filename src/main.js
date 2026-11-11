@@ -7,7 +7,7 @@ const startButton=document.querySelector('#restart'),pauseButton=document.queryS
 const modeButton=document.querySelector('#mode'),overlay=document.querySelector('#overlay');
 const keys=new Set(),touch=new Set(),clock=new FixedClock({step:STEP,maxFrame:.12,maxSteps:6});
 const KEY='qsol.drone-racer.independence-sprint.v1.bestTicks';
-let session,paused=true,previous=performance.now(),lastGate=0;
+let session,started=false,paused=true,previous=performance.now(),lastGate=0;
 function best(){
   try{const raw=localStorage.getItem(KEY);if(raw===null)return null;
     const n=Number(raw);return Number.isSafeInteger(n)&&n>0?n:null;
@@ -23,7 +23,13 @@ function updateHUD(){
     ' · BEST '+(secondsFromTicks(r.bestTicks)??'--')+'s';
 }
 function pause(on){
+  // The start overlay is an explicit race gate, not a paused running session.
+  // A pre-start click/key/blur cannot resume simulation behind the overlay.
+  if(!started||(!on&&session.race.status==='finished'))return;
   paused=Boolean(on);clock.setPaused(paused);clearInputs();
+  // requestAnimationFrame may be suspended for minutes while the page is
+  // backgrounded. The first post-resume frame must not consume that interval.
+  if(!paused)previous=performance.now();
   if(paused)notice.textContent='PAUSED — PRESS RESUME';
   else notice.textContent=lastGate
     ? 'GATE CLEARED · '+lastGate+'/'+session.track.gates.length
@@ -32,8 +38,9 @@ function pause(on){
 }
 function reset(){
   session=createSession(undefined,best());clock.reset();clock.setPaused(false);
-  paused=false;clearInputs();lastGate=0;overlay.hidden=true;
+  started=true;paused=false;clearInputs();lastGate=0;overlay.hidden=true;
   modeButton.textContent='Mode: Assisted';pauseButton.textContent='Pause';
+  pauseButton.disabled=false;
   notice.textContent='FLY THROUGH EACH GATE IN ORDER';previous=performance.now();updateHUD();
 }
 function down(k){return keys.has(k)||touch.has(k);}
@@ -74,7 +81,7 @@ function resize(){
   canvas.height=Math.max(1,Math.min(1000,Math.round(canvas.clientHeight*scale)));
 }
 new ResizeObserver(resize).observe(canvas);resize();
-session=createSession(undefined,best());updateHUD();
+session=createSession(undefined,best());pauseButton.disabled=true;updateHUD();
 function frame(now){
   const elapsed=Math.max(0,(now-previous)/1000);previous=now;
   if(!paused)clock.advance(elapsed,()=>{
@@ -82,7 +89,7 @@ function frame(now){
     const r=session.race;
     if(r.nextGate!==lastGate){lastGate=r.nextGate;notice.textContent='GATE CLEARED · '+r.nextGate+'/'+session.track.gates.length;}
     if(r.status==='finished'){
-      saveBest(r.bestTicks);pause(true);
+      saveBest(r.bestTicks);pause(true);pauseButton.disabled=true;
       notice.textContent='FINISHED IN '+secondsFromTicks(r.finishedTicks)+'s — PRESS R TO RESTART';
     }
   });
