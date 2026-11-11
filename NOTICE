@@ -1,0 +1,3 @@
+DRONE-RACER — QSOL-IMC contributors. Apache-2.0. See LICENSE.
+
+Vendored VANILLAJS math, collision, flight and time modules copied under Apache-2.0 from QSOLKCB/VANILLAJS at e2176b0e5f04060ef4bec6acd8a11398e4b86746. Original SPDX notices retained. See engine/VANILLAJS_SOURCE.md.

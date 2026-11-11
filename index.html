@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080e1e">
+<meta name="description" content="DRONE-RACER — offline-first VANILLAJS 6DOF drone racing. This is INDEPENDENCE.">
+<title>DRONE-RACER | QSOL-IMC</title><link rel="stylesheet" href="./styles.css"></head><body>
+<header class="top"><div class="brand">DRONE<span>RACER</span><small>QSOL-IMC // VANILLAJS</small></div>
+<nav aria-label="Project links"><a href="https://github.com/QSOLKCB/DRONE-RACER">SOURCE</a><a href="https://github.com/QSOLKCB/VANILLAJS">ENGINE</a></nav></header>
+<main><section class="intro"><p class="eyebrow">DRONE-001 / FIRST FLIGHT</p><h1>Race the void.<br><span>Own the machine.</span></h1>
+<p>A six-gate, offline-first time trial on the VANILLAJS flight engine. No accounts, cloud service or runtime packages required.</p></section>
+<div class="shell"><div class="status"><span id="hud" role="status" aria-live="off">READY</span><span>FLOATING-POINT FLIGHT · NOT Q16.16</span></div>
+<div class="viewport"><canvas id="flight" width="960" height="540" aria-label="Perspective view of six neon drone race gates"></canvas>
+<div class="start" id="overlay"><h2>INDEPENDENCE SPRINT</h2><p>Six gates. One clock. Zero excuses.</p>
+<button class="primary" id="restart" type="button">START RACE / RESTART</button></div>
+<div class="notice" id="notice" aria-live="polite">START WHEN READY</div></div>
+<div class="buttons"><button id="pause" type="button">Pause</button><button id="mode" type="button">Mode: Assisted</button>
+<button id="restart-inline" type="button">Restart</button><span>NO TELEMETRY · LOCAL BEST TIME</span></div>
+<div class="touch" aria-label="Touch flight controls">
+<button data-control="KeyA" type="button" aria-label="Strafe left">◀</button>
+<button data-control="KeyW" type="button" aria-label="Forward thrust">▲ THRUST</button>
+<button data-control="KeyD" type="button" aria-label="Strafe right">▶</button>
+<button data-control="ArrowLeft" type="button" aria-label="Yaw left">↶</button>
+<button data-control="Space" type="button" aria-label="Brake">BRAKE</button>
+<button data-control="ArrowRight" type="button" aria-label="Yaw right">↷</button></div></div>
+<aside class="help"><h2>THE CONTROLS</h2>
+<p><kbd>W</kbd>/<kbd>S</kbd> thrust · <kbd>A</kbd>/<kbd>D</kbd> strafe · <kbd>Q</kbd>/<kbd>E</kbd> vertical</p>
+<p><kbd>ARROWS</kbd> pitch/yaw · <kbd>C</kbd>/<kbd>V</kbd> roll · <kbd>SPACE</kbd> brake</p>
+<p><kbd>M</kbd> assisted/inertial · <kbd>P</kbd> pause · <kbd>R</kbd> restart</p>
+<p>Pass through the highlighted frames in order. Swept world-space crossings count the gates; pixels do not.</p></aside></main>
+<footer>THIS IS NOT A PRODUCT. THIS IS <b>INDEPENDENCE.</b> 👽 · <a href="https://github.com/QSOLKCB/INDEPENDENCE">INDEPENDENCE</a> · Apache-2.0</footer>
+<script type="module" src="./src/main.js"></script></body></html>
