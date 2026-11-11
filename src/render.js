@@ -23,13 +23,30 @@ function clipNear(a,b){
   const intersection=a.map((v,i)=>v+(b[i]-v)*t);
   return frontA?[a,intersection]:[intersection,b];
 }
+// Clip the projected segment to the visible canvas viewport. Near-plane
+// clipping can leave both endpoints off-screen while the line itself crosses
+// the viewport; endpoint-only visibility checks would discard that edge.
+function clipViewport(a,b,w,h){
+  const dx=b[0]-a[0],dy=b[1]-a[1];
+  let lo=0,hi=1;
+  for(const [p,q] of [[-dx,a[0]],[dx,w-a[0]],[-dy,a[1]],[dy,h-a[1]]]){
+    if(p===0){if(q<0)return null;continue;}
+    const t=q/p;
+    if(p<0){if(t>hi)return null;lo=Math.max(lo,t);}
+    else {if(t<lo)return null;hi=Math.min(hi,t);}
+  }
+  if(lo>hi)return null;
+  return [[a[0]+dx*lo,a[1]+dy*lo],[a[0]+dx*hi,a[1]+dy*hi]];
+}
 function stroke3(ctx,body,points,w,h,color,width){
   const camera=points.map(p=>cameraPoint(body,p));
   for(let i=1;i<camera.length;i++){
     const clipped=clipNear(camera[i-1],camera[i]);
     if(!clipped)continue;
     const a=screenPoint(clipped[0],w,h),b=screenPoint(clipped[1],w,h);
-    ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);
+    const visible=clipViewport(a,b,w,h);
+    if(!visible)continue;
+    ctx.beginPath();ctx.moveTo(...visible[0]);ctx.lineTo(...visible[1]);
     ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();
   }
 }
