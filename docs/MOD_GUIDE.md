@@ -1,55 +1,155 @@
-# DRONE-RACER — Mod and Reskin Guide
+# DRONE-RACER — course and skin mod guide
 
 **This is not a product. This is INDEPENDENCE. 👽**
 
-DRONE-002 implements a working **data-only JSON pack format** for drone flight presets, colours and rectangular gate courses. It does not load arbitrary executable scripts, install mods from the internet or claim to provide the future full VANILLAJS Mod SDK.
+DRONE-003 has two local JSON formats: course/drone packs and cosmetic skin
+packs. Import validates the entire file before activation; rejection leaves
+the last working selection intact. No executable code, remote asset URL,
+texture download or arbitrary HTML/CSS is accepted. Files stay in memory;
+re-import after reload. Export downloads the **currently selected** pack,
+including a custom import, so other players can edit and redistribute it.
 
-## Make your first mod
+## Cosmetic skin packs
 
-Download `mods/examples/independence-scout.json`, copy it to `my-drone.json`, and edit the copy. Alternatively use **Download example pack** in the game. Open the game's **Import JSON** selector and select the edited file. It validates and compiles the entire pack before changing the active race; a rejected file leaves the last working pack intact. The maximum import size is **32 KiB**. Imported packs are in-memory only: reselect the file after reload.
+Choose a skin in the Hangar and switch to **View: Chase** (`T`). Six built-in
+skins combine Scout, Manta, Razor and Hauler body shapes with distinct palettes.
+**Export skin pack** downloads the starter. A checked-in copy lives at
+[`mods/skins/independence-hangar.json`](../mods/skins/independence-hangar.json).
+Import edited files with **Import skin JSON**; the limit is **64 KiB**.
 
-The pack must contain exactly `kind`, `id`, `version`, `title`, `accent`, `drone` and `course`. The kind is `qsol.drone-racer.pack.v1` and version is `1`. Give each mod a distinct lowercase slug as its ID. Imported configurations use an isolated SHA-256 content-derived record key, so even a custom pack that reuses `independence-sprint` can never overwrite the original sprint's best time. Changes to course or drone data create a separate record. Web Crypto SHA-256 is required for persistent imported records and works on GitHub Pages HTTPS and loopback localhost. Unknown keys or unsupported versions fail closed.
+A minimal working pack:
 
-## Reskin the drone
+```json
+{
+  "kind": "qsol.drone-racer.skins.v1",
+  "id": "my-hangar",
+  "version": 1,
+  "title": "My Hangar",
+  "author": "Your name",
+  "skins": [{
+    "id": "copper-scout",
+    "name": "Copper Scout",
+    "colors": {
+      "body": "#cc7733", "trim": "#55ffcc",
+      "rotor": "#77ddff", "canopy": "#cceeff"
+    },
+    "parts": [
+      {"position": [0, 0, 0], "size": [0.5, 0.25, 0.9], "color": "body"},
+      {"position": [0, 0, 0], "size": [1.8, 0.08, 0.12], "color": "trim"}
+    ],
+    "rotors": [
+      {"position": [-0.8, 0.08, 0], "radius": 0.3, "blades": 3},
+      {"position": [0.8, 0.08, 0], "radius": 0.3, "blades": 3}
+    ]
+  }]
+}
+```
 
-Set `drone.color` and `accent` to six-digit hexadecimal colours such as `"#ff8800"`. The first colours the procedural drone silhouette in **View: Chase** and the second colours the active racing gates and rotor effects. Press **T** to switch FPV/chase.
+All fields shown are required; extra fields and accessor/sparse-array records
+are rejected. IDs are lowercase slugs, at most 48 characters. Titles/authors
+are 1–64 characters; skin names 1–48. A pack contains **1–16 unique skins**.
+Each skin contains **1–48 cuboid parts** and **0–8 rotors**.
 
-This version provides **colour reskins**, not external image/texture import, animated meshes, glTF files, shader plugins, or untrusted HTML/CSS. Those will require separately reviewed local asset formats, bounds and rights metadata.
+Positions and dimensions are local metres, +Y up and −Z forward. Each part
+selects one of the four required six-digit hex colour slots. Part centres are
+within ±2 m, dimensions 0.03–3 m, and the complete part must fit inside the
+4 m cosmetic cube. Rotor centres are within ±1.5 m, radii 0.1–0.6 m, with
+2–5 blades; their full horizontal radius must fit inside ±2 m. These are
+**visual bounds**, not hitboxes: large cosmetic parts can overhang the much
+smaller physical collision cube. Geometry follows all three drone rotations.
 
-## Tune handling and thrust
+Skins never alter mass, speed, half-size, checkpoints or record keys. Put
+handling changes in a course/drone pack. The built-in Scout still respects
+DRONE-002's `drone.color`; other selected skins supply their own body palette.
+**Built-in skins** restores the original hangar after an import.
 
-The `drone` object accepts only `name`, `color`, `mass`, `halfSize`, `acceleration`, `maxSpeed`, `response`, `angularAcceleration`, `turnSpeed`, `angularResponse` and `brake`. The numeric values are finite, bounded and used to configure existing Float64 VANILLAJS flight. The limits and checks are in `src/mods.js`.
+## Course and drone packs
 
-For instance, changing `acceleration` from `36` to `45` increases thrust response. A different pack ID gets its own local best-time record. The default Independence Sprint retains its old storage key for backward compatibility.
+Use **Export course** for a complete starter or edit
+[`mods/examples/neon-harbour.json`](../mods/examples/neon-harbour.json).
+The original `independence-scout.json` and `spectrum-dash.json` examples still
+work. The maximum course file size is **32 KiB**.
 
-No drone flight parameter is a claim about a calibrated consumer drone.
+The outer object contains exactly `kind`, `id`, `version`, `title`, `accent`,
+`drone`, `course`. Kind is `qsol.drone-racer.pack.v1`, outer version is `1`;
+the inner course independently selects version 1 or 2. Accent is `#rrggbb`.
 
-## Build a course
+`drone` has exactly `name`, `color`, `mass`, `halfSize`, `acceleration`,
+`maxSpeed`, `response`, `angularAcceleration`, `turnSpeed`, `angularResponse`,
+`brake`. Bounded numeric values configure the retained Float64 flight kernel;
+see `src/mods.js` for each permitted range. For example, increasing acceleration
+from 36 to 45 changes thrust response. These are game presets, not calibrated
+real-world drone models.
 
-A course has exactly `{id,version:1,gates}`, and each gate has exactly `{id,x,y,z,width,height}`. Geometry is written as **decimal strings**, not JSON numeric literals.
+Imported configurations receive an isolated SHA-256 content-derived record
+key. Reusing `independence-sprint` never replaces the original sprint's best
+time. Course/drone pack changes get separate records; standalone cosmetic
+skin changes do not. Web Crypto is required for imported record identity;
+use HTTPS or loopback localhost. Original built-in record keys are retained.
 
-Example:
+### Version 1: original straight sprint
 
-    {"id":"01","x":"0","y":"3","z":"-28","width":"14","height":"9"}
+The course is exactly `{id,version:1,gates}`; each gate has exactly
+`{id,x,y,z,width,height}`, with geometry as **decimal strings**:
 
-Use 2–64 gates. The gate planes descend monotonically along -Z and must be at least 4 metres apart. X centres stay within ±200 metres; Y centres 0–200 metres; Z at least -32767. Gate widths/heights are 2–100 metres. The compiled gate edges must be exactly representable in Q16.16, because imported packs always use explicit `rounding:'exact', overflow:'reject'`.
+```json
+{"id":"01","x":"0","y":"3","z":"-28","width":"14","height":"9"}
+```
 
-Read [ALIEN MATH precision and checkpoint semantics](ALIEN_MATH_DRONE_002.md). The game currently supports an ordered, mostly straight run of rectangular gates. A looping circuit, arbitrarily rotated ring and physical wall/obstacle collision are future phases.
+Use 2–64 gates descending monotonically along −Z, at least 4 m apart.
+X centres stay within ±200 m, Y 0–200 m, Z at least −32767 m. Widths/heights
+are 2–100 m. Edges must be exactly Q16.16-representable. These courses are
+one-lap sprints with their original non-solid checkpoint behaviour.
 
-## What about game modes and other mods?
+### Version 2: directional circuits and obstacles
 
-Right now, a new pack is a new **track + drone setup**, not an executable gameplay script. To create custom missions, physics modules, true AI racers or shader programs, fork the Apache-2.0 source or wait for the reviewed VANILLAJS Mod SDK extension design.
+The course has exactly `id`, `version:2`, `laps`, `spawn`, `gates`, `obstacles`.
+Use **1–9 laps**, **4–64 gates**, **0–96 obstacles**. `spawn` is a three-element
+array of exact decimal strings. Its largest supported drone cube must clear
+all solids. Course geometry is bounded to ±4096 m.
 
-A JavaScript extension running in the game's origin would have the game's privileges. A manifest or a filename is not a security sandbox. This format is deliberately JSON-only.
+Each gate adds `axis` (`"x"` or `"z"`) and `direction` (`-1` or `1`):
 
-The existing [OFFLINE-GAMES Mod Guide](https://github.com/QSOLKCB/OFFLINE-GAMES/blob/main/MOD_GUIDE.md) is a reference for more mature **trusted** local code mods.
+```json
+{"id":"east-01","x":"80","y":"8","z":"-160",
+ "width":"20","height":"14","axis":"x","direction":1}
+```
 
-## Test and redistribute
+This gate lies on the X=80 plane and accepts travel towards increasing X.
+Its width spans Z, with height along Y. For a Z-plane gate, width spans X.
+Apertures are 4–60 m wide/high, have exactly representable Q16.16 edges and
+must remain above ground. Gate IDs are unique lowercase slugs. Cardinal
+planes support loops with changing directions; arbitrary angled hoops are
+not part of this format.
 
-    node --test tests/*.test.js
-    node scripts/site.mjs build _site
-    node scripts/site.mjs verify _site
+Obstacles are static boxes, with unique IDs across gates and obstacles:
 
-The example JSON files live in the source repository; import them locally rather than relying on a hosted mod repository. Preserve Apache-2.0 and adapted-source attribution for derivative games.
+```json
+{"id":"pillar-01","min":["12","0","-60"],
+ "max":["16","15","-56"],"color":"#ff9955"}
+```
 
-**Game-specific content lives in DRONE-RACER. Reusable engine improvements go upstream into VANILLAJS.**
+All min coordinates must be strictly below max, and min Y must be nonnegative.
+The renderer shows the actual boxes used for collision. Gate beams are also
+solid. Leave room for corners, approaches, recovery positions and the drone's
+configured half-size. Validation checks structure and bounds; it does not
+prove your authored course is flyable or make obstacles mandatory shortcuts.
+
+The strict chronological crossing, lap-boundary and contact suppression
+rules are specified in [the circuit contract](CIRCUITS_AND_PRESENTATION.md).
+On a collision tick, even a genuine crossing before impact is conservatively
+withheld. Back up and re-approach the highlighted gate.
+
+## Verify and share
+
+```sh
+node --test tests/*.test.js
+node scripts/site.mjs build _site
+node scripts/site.mjs verify _site
+```
+
+The runtime remains native ES modules and local assets. JSON files do not
+load scripts, meshes or textures. This is a bounded game mod kit, not the full
+future VANILLAJS Mod SDK or a sandbox for same-origin JavaScript. Preserve
+Apache-2.0/source attribution when redistributing derivative code; identify
+your own artwork and authorship when sharing data packs.

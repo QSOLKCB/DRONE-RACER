@@ -1,0 +1,291 @@
+{
+  "kind": "qsol.drone-racer.drone-003.local-evidence.v1",
+  "createdUTC": "2026-11-11T16:48:49.841Z",
+  "parentCommit": "f2aea5ccb2e5fbe6b734a58cbbec4ce8fff93bc6",
+  "additionalVanillaJSSource": "3c461c0322dbdfcfb758983c74f8943ea8d92153",
+  "environment": {
+    "node": "v22.18.0",
+    "platform": "linux",
+    "arch": "x64",
+    "playwright": "1.64.0"
+  },
+  "checks": {
+    "nodeTests": 48,
+    "passed": 48,
+    "failed": 0,
+    "checkpointFractionCases": 2048,
+    "projectionVertices": 400,
+    "projectionMatrices": 40,
+    "projectionContract": "exact binary32 operation-by-operation bits",
+    "independentPCMCues": 7,
+    "packageAssets": 31,
+    "packageManifestSHA256": "c28dab5795d2d46a75248457ed5e2bd41e758d92ca885d677e9e990ae8af4ab7",
+    "syntax": "PASS",
+    "workflowYaml": "PASS"
+  },
+  "browser": {
+    "browser": "158.0.8127.18",
+    "ui": "PASS",
+    "errors": [],
+    "parity": {
+      "adapter": {
+        "description": "",
+        "vendor": "google",
+        "device": "",
+        "fallback": true
+      },
+      "deviceLossFallback": "cpu",
+      "gameSceneFrames": 36,
+      "raceAndSoundNoninterference": "PASS",
+      "fixtures": [
+        {
+          "name": "interior",
+          "numerical": "bit-exact",
+          "independentPixels": 13936,
+          "maxInteriorError": 0,
+          "edgeMismatchFraction": 0.01556396484375
+        },
+        {
+          "name": "near-plane",
+          "numerical": "bit-exact",
+          "independentPixels": 13621,
+          "maxInteriorError": 0,
+          "edgeMismatchFraction": 0.01495361328125
+        },
+        {
+          "name": "viewport",
+          "numerical": "bit-exact",
+          "independentPixels": 12750,
+          "maxInteriorError": 0,
+          "edgeMismatchFraction": 0.0186767578125
+        },
+        {
+          "name": "depth",
+          "numerical": "bit-exact",
+          "independentPixels": 12912,
+          "maxInteriorError": 0,
+          "edgeMismatchFraction": 0.0264892578125
+        },
+        {
+          "name": "perspective",
+          "numerical": "bit-exact",
+          "independentPixels": 14724,
+          "maxInteriorError": 1,
+          "edgeMismatchFraction": 0.01568603515625
+        },
+        {
+          "name": "behind",
+          "numerical": "bit-exact",
+          "independentPixels": 16384,
+          "maxInteriorError": 0,
+          "edgeMismatchFraction": 0
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Software fallback adapter with real offscreen GPU attachment; no physical GPU or desktop swapchain witness.",
+    "Finite fixtures, not universal pixel parity, a Float64 replay proof or a performance benchmark.",
+    "Contact ticks deliberately suppress even genuine pre-impact crossings.",
+    "Browser audio-device output is not identity-bearing; logs and reference cue PCM are.",
+    "Local Chromium version is recorded; CI installs the browser matching its pinned Playwright."
+  ],
+  "sourceFiles": [
+    {
+      "path": ".github/workflows/pages.yml",
+      "sha256": "c9f119ac858273ef45d6213b7095dab0e2fae55761235ece8593c628d0d4f47d"
+    },
+    {
+      "path": "engine/VANILLAJS_SOURCE.md",
+      "sha256": "2d93b15e61afb389ad0987e9f283d792b3a8cc9d162393144acb5c4cb98a64c8"
+    },
+    {
+      "path": "engine/audio2d/index.js",
+      "sha256": "07e19391b84034acba56ef840a4d622b70e815f5376de123b6a07a9ccebf3098"
+    },
+    {
+      "path": "engine/collision/index.js",
+      "sha256": "99c0f4bc106d4162fc5bea057a7108d7cf52526279b2a8ad4e4f27c1f0e6f5c1"
+    },
+    {
+      "path": "engine/exact-course/index.js",
+      "sha256": "1dae7f274c83f233bf9e56fec6ddcf3399ace6c4c4d93713851445f8210e18dd"
+    },
+    {
+      "path": "engine/exact-rational/index.js",
+      "sha256": "dbc7e08ee27e824c874b339074804a0d103906fb91b2f2c3b3ad806cf05e0f48"
+    },
+    {
+      "path": "engine/flight/index.js",
+      "sha256": "da9d416b5148a61bdad9ec46e499a62428eb96a091be4ff40248f3bb3cb9dcc6"
+    },
+    {
+      "path": "engine/integer-math/index.js",
+      "sha256": "4c0bb66780bf9e810efb1963c0238d9356814abf79c959dcd1734164de57905f"
+    },
+    {
+      "path": "engine/math/index.js",
+      "sha256": "4f4ebf0786b97342c11004b8830a535890b16693458a0436edb1fc581a411da7"
+    },
+    {
+      "path": "engine/rational-q16/index.js",
+      "sha256": "8383681b2f8fd1404261d73b4c7447217a54af72b1a400ed01f9a993d432bcc7"
+    },
+    {
+      "path": "engine/render-optional/index.js",
+      "sha256": "3119543e88252c4b5c4a14fe0dde15fc3a444e5860f9ebeafb7f14629de2e711"
+    },
+    {
+      "path": "engine/render-optional/project.wat",
+      "sha256": "298bf50eabe623a617e68ad1c69a100c2f2595abee71c9a44043951d42dc09f1"
+    },
+    {
+      "path": "engine/render-optional/wasm-bytes.js",
+      "sha256": "8750b9d17cb82fee910762c6c2bc0e787b0203120fe4e1331bf67bc5be3c1595"
+    },
+    {
+      "path": "engine/render-optional/webgpu.js",
+      "sha256": "fdaa1656f74984db0a48cca01b56b02be63a6b0c555195e99fd5809294cacd63"
+    },
+    {
+      "path": "engine/time/index.js",
+      "sha256": "de94c0bc04e6a269504c5742455ce114f824c2c0d9d59a2fd94555df5d9bb4a2"
+    },
+    {
+      "path": "index.html",
+      "sha256": "57fa132b64eb7f72f1b59353ed77af36a615759d122851fe23d4a63f282345dd"
+    },
+    {
+      "path": "mods/examples/independence-scout.json",
+      "sha256": "8ea093acded5c45220ed058151fb8394ad483eac78e829beed844b8f58868458"
+    },
+    {
+      "path": "mods/examples/neon-harbour.json",
+      "sha256": "a98f0d91e06bcaf27a5af251bfae5abaccf41cf3a913d51338d6e4bddd86bed9"
+    },
+    {
+      "path": "mods/examples/spectrum-dash.json",
+      "sha256": "a700d92b8fc9b01806b30791ed64d7469eaf6ecb54dea4af7eb3660520991076"
+    },
+    {
+      "path": "mods/skins/independence-hangar.json",
+      "sha256": "41d8bb30743c1859d90c7bb7964e9fafd1810aad2f8876a0767586ae3baf4b7f"
+    },
+    {
+      "path": "package.json",
+      "sha256": "5975602f8bf047f28268c81ddda92d66763df330efafd173ffe2fee97b21e5c2"
+    },
+    {
+      "path": "scripts/browser-check.mjs",
+      "sha256": "7641c3012f5f569f46cda75d45955421f73712aa5624f492b052cbad5f68e640"
+    },
+    {
+      "path": "scripts/drone_002_oracle.py",
+      "sha256": "2faab624bbd44dcead6b08c247318a3697ae4c1a1f08de2cb3fd484e89a85bb7"
+    },
+    {
+      "path": "scripts/drone_003_oracle.py",
+      "sha256": "5d0586e021c7a5e867a3eeb885de267b7e77bca7be28f9ffab708b3c9f7815db"
+    },
+    {
+      "path": "scripts/renderer-parity.mjs",
+      "sha256": "c7d33fb4ab4b82a319a1052794bce2c5de25ec71687fef702f6bedc9dffe199d"
+    },
+    {
+      "path": "scripts/site.mjs",
+      "sha256": "d4605a0e2f592e88909f5c5bec59b2b36da0e16d1d6cb699830c71b74c7f5018"
+    },
+    {
+      "path": "src/audio.js",
+      "sha256": "fa85d8a30f7c1587ad786ce2c388781243af4ebeeb99fe1f3edf6b82a80fe1f6"
+    },
+    {
+      "path": "src/circuit.js",
+      "sha256": "6fd70e4e571e8f771bdf308f92ad9ee7e5426051a5e9c139162c86aaa25bce3e"
+    },
+    {
+      "path": "src/courses.js",
+      "sha256": "278e7ec7b22bbd47bfca78ca0b6911925d0be0c6c20dde58ad9a0205b2f776da"
+    },
+    {
+      "path": "src/data.js",
+      "sha256": "e9676e6fc468b09e04e55fc63aa68ffde1e1fe29a1167a813ee3b9146865026d"
+    },
+    {
+      "path": "src/game.js",
+      "sha256": "ff8ca061e350f50f59b71b66b00247bec342b02f3fc9e4dfe0b5ce13b6801380"
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "2341dd8b3f4bc13be288f5ef8861bd35be2a93ca23e03a7f15694c00f9564e8e"
+    },
+    {
+      "path": "src/mods.js",
+      "sha256": "10c6c6f69a3712e4eb2850d66fc00ce59bd57d146445c86e4a37af6660e73ccf"
+    },
+    {
+      "path": "src/position-q16.js",
+      "sha256": "98870be8e196fa863be15ad376ceb5a99f7f3d560421b677991bbbbc904dabd6"
+    },
+    {
+      "path": "src/preferences.js",
+      "sha256": "5cc2cd230657cb37ea7e5ac7078953f9ca88a4581546e6f62adedccad76c5d9f"
+    },
+    {
+      "path": "src/records.js",
+      "sha256": "66786086b450563690022fb7e319a38c2b5dcf232328f54b0ae0504d4aa17e58"
+    },
+    {
+      "path": "src/render.js",
+      "sha256": "dc5001d19bc638dc7d2483a60e73cb484d401d750e5e4cd528f9cf03ba6eb27a"
+    },
+    {
+      "path": "src/scene.js",
+      "sha256": "419a523fe8b0e5125aee5af7f675fca9095637293c66dcc2b29e2a83844f6726"
+    },
+    {
+      "path": "src/skins.js",
+      "sha256": "51771d1a071cb8930c5a1ea9b2cd892943de7d15657a93bb2dd70e4a8ea43d69"
+    },
+    {
+      "path": "src/track.js",
+      "sha256": "169773f9d83c3b79d7a08c0465d1ea63cea871f62526da3b3f7b8a6e0f9ffe45"
+    },
+    {
+      "path": "styles.css",
+      "sha256": "ec20126a6f73b953d0e1e7d9dcae0ff55ec42c7486b27be00d1ee14fdcf773af"
+    },
+    {
+      "path": "tests/circuits.test.js",
+      "sha256": "6c3183ae65943475ecebf0d330f9d8a1e73951ef132f7380d77b6090996ac251"
+    },
+    {
+      "path": "tests/drone-002.test.js",
+      "sha256": "9587cab9ce0414aa70d1993295c03a64d59732a9b6ffa53583540adfd920e27b"
+    },
+    {
+      "path": "tests/main-ui.test.js",
+      "sha256": "2a6d04c1a767e905bebe5c0ea06ff9abdb7eaee923f14b383ea7a7db563470e9"
+    },
+    {
+      "path": "tests/presentation.test.js",
+      "sha256": "c8d58bee3fa925940fbd4af064a66d3bbedf14d1110d5899f3c414effa5d00ed"
+    },
+    {
+      "path": "tests/records.test.js",
+      "sha256": "8b3c123d23ea9c9729a201b20dc88d44fce5167196c0ec3e1ca56523ef244b57"
+    },
+    {
+      "path": "tests/render.test.js",
+      "sha256": "d2bab44edb62c65eca0f3cd779f1922a70762eac4019f2ffd41fd137ab3921e2"
+    },
+    {
+      "path": "tests/site.test.js",
+      "sha256": "9aae9b3be3ee733c848f13045c18846275497ef2596fb1327f35553b96de3540"
+    },
+    {
+      "path": "tests/track.test.js",
+      "sha256": "8f0f6b59351cc432503081244270a48b0faf5832688d29a43b0045a08960e6ea"
+    }
+  ]
+}

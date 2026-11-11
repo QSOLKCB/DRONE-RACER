@@ -15,7 +15,7 @@ async function withGame(label,run){
     createLinearGradient:()=>({addColorStop(){}}),
     createRadialGradient:()=>({addColorStop(){}}),
     fillRect(){},save(){},restore(){},fillText(){},arc(){},
-    beginPath(){},moveTo(){},lineTo(){},stroke(){}
+    beginPath(){},moveTo(){},lineTo(){},stroke(){},closePath(){},fill(){}
   };
   function element(){
     const local=new Map();

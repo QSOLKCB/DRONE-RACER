@@ -1,6 +1,6 @@
 # DRONE-RACER — research and game development roadmap
 
-**Current:** DRONE-001 merged and deployed. DRONE-002 proposed for review; later phases remain planned and unimplemented.
+**Current:** DRONE-001/002 are the retained baseline. DRONE-003 circuits, skins and presentation are implemented in this review branch; owner merge and deployment remain pending.
 
 ## Policy
 
@@ -17,7 +17,7 @@
 - [x] Tests, documentation, SHA-256-verified static build and GitHub Pages workflow.
 - [x] Original PR CI passed; GitHub Pages deployed after reviewed merge.
 
-## DRONE-002 — ALIEN MATH and data-only mod kit (this PR)
+## DRONE-002 — ALIEN MATH and data-only mod kit (retained)
 
 - [x] Source-pinned reviewed ALIEN MATH course bridge and unchanged original Float64 flight kernel.
 - [x] Checked exact authoring with explicit Q16.16 quantization and widened swept gate admission.
@@ -38,12 +38,22 @@
 
 ## VANILLAJS-GPU-002 — opt-in WebGPU and WASM expansion
 
-- [ ] Retain CPU-first playable renderer and explicit user choice.
-- [ ] Bounded WebGPU buffers and targeted WASM math kernels with independent parity checks.
+- [x] CPU-first playable renderer and explicit user choice.
+- [x] Pinned bounded WebGPU buffers and WASM projection, with independent numeric/pixel checks.
 - [ ] Test hardware device loss, fallback and distinct CPU/GPU timings.
-- [ ] Do not modify race simulation state as a side effect of renderer selection.
+- [x] CPU/WebGPU game-rendering noninterference checks for body, race and sound events.
 
-## DRONE-003 — Independence modding studio
+## DRONE-003 — Independence Circuit (this PR)
+
+- [x] Separate exact cardinal v2 courses, ordered lap boundaries and solid obstacles.
+- [x] Three long multi-lap courses; preserved v1 sprint source and records.
+- [x] Six cosmetic skins and a bounded JSON body/rotor/palette mod pack.
+- [x] Tick sound-event logs, independent integer PCM oracle and generated music.
+- [x] CPU quality presets, opt-in WASM/WebGPU presentation and fallback.
+- [x] Minimap, guidance, lap results, checkpoint recovery, preferences and controls.
+- [x] Independent Fraction/binary32/PCM oracles and software WebGPU readback.
+
+### Later modding studio work
 
 - [ ] Versioned local data-only track, drone, asset and race-mode manifests.
 - [ ] Modifiable race rules, replay-controlled trials, custom drone handling and safe save migration.
@@ -53,7 +63,7 @@
 
 ## DRONE-004 — polished game and reproducible release
 
-- [ ] Ghost trials, local championships, AI rivals, audio and visual polish.
+- [ ] Ghost trials, local championships and AI rivals; further audio/visual polish.
 - [ ] Performance and deterministic-replay evidence with explicit limitations.
 - [ ] End-to-end offline game/mod documentation and versioned distribution.
 - [ ] Owner-approved release, immutable tag and any optional archive record.

@@ -1,0 +1,764 @@
+{
+  "kind": "qsol.drone-racer.skins.v1",
+  "id": "independence-hangar",
+  "version": 1,
+  "title": "Independence Hangar",
+  "author": "QSOL-IMC",
+  "skins": [
+    {
+      "id": "scout",
+      "name": "Independence Scout",
+      "colors": {
+        "body": "#e4fcf6",
+        "trim": "#59ffdd",
+        "rotor": "#59ffdd",
+        "canopy": "#b9e7ff"
+      },
+      "parts": [
+        {
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.25,
+            0.85
+          ],
+          "color": "body"
+        },
+        {
+          "position": [
+            0,
+            0.18,
+            -0.18
+          ],
+          "size": [
+            0.36,
+            0.14,
+            0.45
+          ],
+          "color": "canopy"
+        },
+        {
+          "position": [
+            0,
+            0,
+            -0.7
+          ],
+          "size": [
+            1.7,
+            0.08,
+            0.12
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0,
+            0.7
+          ],
+          "size": [
+            1.7,
+            0.08,
+            0.12
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0.08,
+            0.4
+          ],
+          "size": [
+            0.15,
+            0.15,
+            0.18
+          ],
+          "color": "trim"
+        }
+      ],
+      "rotors": [
+        {
+          "position": [
+            -0.85,
+            0.06,
+            -0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            -0.85,
+            0.06,
+            0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            0.85,
+            0.06,
+            -0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            0.85,
+            0.06,
+            0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        }
+      ]
+    },
+    {
+      "id": "wasp",
+      "name": "Spectral Wasp",
+      "colors": {
+        "body": "#e3a7ff",
+        "trim": "#ff62c7",
+        "rotor": "#ff62c7",
+        "canopy": "#b9e7ff"
+      },
+      "parts": [
+        {
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.25,
+            0.85
+          ],
+          "color": "body"
+        },
+        {
+          "position": [
+            0,
+            0.18,
+            -0.18
+          ],
+          "size": [
+            0.36,
+            0.14,
+            0.45
+          ],
+          "color": "canopy"
+        },
+        {
+          "position": [
+            0,
+            0,
+            -0.7
+          ],
+          "size": [
+            1.7,
+            0.08,
+            0.12
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0,
+            0.7
+          ],
+          "size": [
+            1.7,
+            0.08,
+            0.12
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0.08,
+            0.4
+          ],
+          "size": [
+            0.15,
+            0.15,
+            0.18
+          ],
+          "color": "trim"
+        }
+      ],
+      "rotors": [
+        {
+          "position": [
+            -0.85,
+            0.06,
+            -0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            -0.85,
+            0.06,
+            0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            0.85,
+            0.06,
+            -0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            0.85,
+            0.06,
+            0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        }
+      ]
+    },
+    {
+      "id": "manta",
+      "name": "Tidal Manta",
+      "colors": {
+        "body": "#256a9f",
+        "trim": "#7de6ff",
+        "rotor": "#7de6ff",
+        "canopy": "#b9e7ff"
+      },
+      "parts": [
+        {
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.9,
+            0.25,
+            0.85
+          ],
+          "color": "body"
+        },
+        {
+          "position": [
+            0,
+            0.18,
+            -0.18
+          ],
+          "size": [
+            0.36,
+            0.14,
+            0.45
+          ],
+          "color": "canopy"
+        },
+        {
+          "position": [
+            0,
+            0,
+            -0.7
+          ],
+          "size": [
+            2.6,
+            0.08,
+            0.12
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0,
+            0.7
+          ],
+          "size": [
+            2.6,
+            0.08,
+            0.12
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0.08,
+            0.4
+          ],
+          "size": [
+            0.15,
+            0.15,
+            0.18
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0.05,
+            0.25
+          ],
+          "size": [
+            2.5,
+            0.06,
+            0.3
+          ],
+          "color": "trim"
+        }
+      ],
+      "rotors": [
+        {
+          "position": [
+            -1.3,
+            0.06,
+            -0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            -1.3,
+            0.06,
+            0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            1.3,
+            0.06,
+            -0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            1.3,
+            0.06,
+            0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        }
+      ]
+    },
+    {
+      "id": "razor",
+      "name": "Solar Razor",
+      "colors": {
+        "body": "#ffc16b",
+        "trim": "#ff704d",
+        "rotor": "#ff704d",
+        "canopy": "#b9e7ff"
+      },
+      "parts": [
+        {
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.25,
+            1.5
+          ],
+          "color": "body"
+        },
+        {
+          "position": [
+            0,
+            0.18,
+            -0.18
+          ],
+          "size": [
+            0.36,
+            0.14,
+            0.45
+          ],
+          "color": "canopy"
+        },
+        {
+          "position": [
+            0,
+            0,
+            -1.1
+          ],
+          "size": [
+            1.7,
+            0.08,
+            0.12
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0,
+            1.1
+          ],
+          "size": [
+            1.7,
+            0.08,
+            0.12
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0.08,
+            0.4
+          ],
+          "size": [
+            0.15,
+            0.15,
+            0.18
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0.27,
+            0.42
+          ],
+          "size": [
+            0.08,
+            0.45,
+            0.4
+          ],
+          "color": "trim"
+        }
+      ],
+      "rotors": [
+        {
+          "position": [
+            -0.85,
+            0.06,
+            -1.1
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            -0.85,
+            0.06,
+            1.1
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            0.85,
+            0.06,
+            -1.1
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            0.85,
+            0.06,
+            1.1
+          ],
+          "radius": 0.3,
+          "blades": 3
+        }
+      ]
+    },
+    {
+      "id": "hauler",
+      "name": "Foundry Hauler",
+      "colors": {
+        "body": "#aab8c5",
+        "trim": "#ffdc65",
+        "rotor": "#ffdc65",
+        "canopy": "#b9e7ff"
+      },
+      "parts": [
+        {
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.25,
+            0.85
+          ],
+          "color": "body"
+        },
+        {
+          "position": [
+            0,
+            0.18,
+            -0.18
+          ],
+          "size": [
+            0.36,
+            0.14,
+            0.45
+          ],
+          "color": "canopy"
+        },
+        {
+          "position": [
+            0,
+            0,
+            -0.7
+          ],
+          "size": [
+            2.2,
+            0.08,
+            0.12
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0,
+            0.7
+          ],
+          "size": [
+            2.2,
+            0.08,
+            0.12
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0.08,
+            0.4
+          ],
+          "size": [
+            0.15,
+            0.15,
+            0.18
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            -0.35,
+            -0.3,
+            0
+          ],
+          "size": [
+            0.09,
+            0.35,
+            0.9
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0.35,
+            -0.3,
+            0
+          ],
+          "size": [
+            0.09,
+            0.35,
+            0.9
+          ],
+          "color": "trim"
+        }
+      ],
+      "rotors": [
+        {
+          "position": [
+            -1.1,
+            0.06,
+            -0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            -1.1,
+            0.06,
+            0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            1.1,
+            0.06,
+            -0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            1.1,
+            0.06,
+            0.7
+          ],
+          "radius": 0.3,
+          "blades": 3
+        }
+      ]
+    },
+    {
+      "id": "ghost",
+      "name": "Void Ghost",
+      "colors": {
+        "body": "#8585c7",
+        "trim": "#c3abff",
+        "rotor": "#c3abff",
+        "canopy": "#b9e7ff"
+      },
+      "parts": [
+        {
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.25,
+            1.5
+          ],
+          "color": "body"
+        },
+        {
+          "position": [
+            0,
+            0.18,
+            -0.18
+          ],
+          "size": [
+            0.36,
+            0.14,
+            0.45
+          ],
+          "color": "canopy"
+        },
+        {
+          "position": [
+            0,
+            0,
+            -1.1
+          ],
+          "size": [
+            1.7,
+            0.08,
+            0.12
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0,
+            1.1
+          ],
+          "size": [
+            1.7,
+            0.08,
+            0.12
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0.08,
+            0.4
+          ],
+          "size": [
+            0.15,
+            0.15,
+            0.18
+          ],
+          "color": "trim"
+        },
+        {
+          "position": [
+            0,
+            0.27,
+            0.42
+          ],
+          "size": [
+            0.08,
+            0.45,
+            0.4
+          ],
+          "color": "trim"
+        }
+      ],
+      "rotors": [
+        {
+          "position": [
+            -0.85,
+            0.06,
+            -1.1
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            -0.85,
+            0.06,
+            1.1
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            0.85,
+            0.06,
+            -1.1
+          ],
+          "radius": 0.3,
+          "blades": 3
+        },
+        {
+          "position": [
+            0.85,
+            0.06,
+            1.1
+          ],
+          "radius": 0.3,
+          "blades": 3
+        }
+      ]
+    }
+  ]
+}

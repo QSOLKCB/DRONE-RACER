@@ -5,6 +5,7 @@ export const LEGACY_SPRINT_KEY='qsol.drone-racer.independence-sprint.v1.bestTick
 export function presetRecordKey(preset){
   if(preset==='default')return LEGACY_SPRINT_KEY;
   if(preset==='spectrum')return 'qsol.drone-racer.preset.spectrum-dash.v1.bestTicks';
+  if(['neon','foundry','endurance'].includes(preset))return 'qsol.drone-racer.circuit.'+preset+'.v1.bestTicks';
   throw new TypeError('unknown first-party preset');
 }
 /**

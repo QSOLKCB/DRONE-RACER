@@ -29,6 +29,25 @@ jobs:
         run: node scripts/site.mjs build _site
       - name: Verify SHA-256 static asset inventory
         run: node scripts/site.mjs verify _site
+      - name: Install isolated browser test tooling
+        run: |
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install --prefix "$RUNNER_TEMP/drone-browser" --ignore-scripts --no-save --package-lock=false --no-audit --no-fund playwright@1.64.0
+          node "$RUNNER_TEMP/drone-browser/node_modules/playwright/cli.js" install --with-deps --only-shell chromium
+      - name: Packaged Chromium and software WebGPU parity
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/drone-browser/node_modules/playwright
+          DRONE_BROWSER_REPORT: ${{ runner.temp }}/drone-browser-report.json
+        run: node scripts/browser-check.mjs
+      - name: Browser evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: drone-browser-evidence
+          retention-days: 7
+          path: |
+            /tmp/drone-racer-desktop.png
+            /tmp/drone-racer-mobile.png
+            ${{ runner.temp }}/drone-browser-report.json
       - name: Configure GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
