@@ -21,7 +21,7 @@ test('swept gate disallows reverse, wrong-side and missed crossings',()=>{
 });
 test('mandatory ordered gates and terminal tick-based timing',()=>{
   let race=newRace();
-  race=advanceRace(race,[0,3,0],[0,3,-90],TRACK);
+  race=advanceRace(race,[0,3,0],[0,3,-40],TRACK);
   assert.equal(race.nextGate,1);
   race=advanceRace(race,[0,3,-150],[0,3,-180],TRACK);
   assert.equal(race.nextGate,1);
