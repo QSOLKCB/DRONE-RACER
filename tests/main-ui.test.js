@@ -15,6 +15,7 @@ async function withGame(label,run){
     createLinearGradient:()=>({addColorStop(){}}),
     createRadialGradient:()=>({addColorStop(){}}),
     fillRect(){},save(){},restore(){},fillText(){},arc(){},
+    createImageData:(width,height)=>({width,height,data:new Uint8ClampedArray(width*height*4)}),putImageData(){},
     beginPath(){},moveTo(){},lineTo(){},stroke(){},closePath(){},fill(){}
   };
   function element(){

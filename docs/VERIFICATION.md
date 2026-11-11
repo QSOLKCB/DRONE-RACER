@@ -112,3 +112,23 @@ Existing main-only Pages deployment still depends on the verification job.
 Local results are in [drone-003-evidence.json](drone-003-evidence.json), bound to
 SHA-256 digests of the implementation and test inputs. No physical GPU timing,
 Firefox/Safari matrix, universal replay proof or live audio identity is claimed.
+
+### Ground contact and obstacle visibility regressions
+
+The follow-up ground/rendering fix adds a shared compiled floor slab for both
+course versions and a game-owned CPU depth rasterizer. The pinned donor files
+and their provenance assertions remain unchanged; the original DRONE-003
+evidence above describes its original source hashes, not the follow-up fix.
+
+`tests/ground.test.js` exercises every preset in assisted and inertial flight,
+different drone sizes, held descent at the former non-solid rim, takeoff,
+high-speed swept impact and lateral sliding. It also checks custom course
+bounds and unchanged airborne motion against the original flight kernel.
+
+The packaged browser check additionally runs
+`scripts/ground-visibility-check.mjs`: actual Canvas pixel reads must keep an
+unobstructed obstacle face visible during low and high flybys in all quality
+presets and both camera views. Held descent must stop at the floor in every
+preset. Rendering must leave the authoritative body and race untouched.
+These results appear in the browser report's `groundAndVisibility` field,
+alongside the existing UI and software WebGPU witnesses.

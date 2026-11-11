@@ -4,6 +4,7 @@ import {parseDecimal} from '../engine/exact-rational/index.js';
 import {quantizeQ16} from '../engine/rational-q16/index.js';
 import {record, list, label, identifier, color, freeze} from './data.js';
 import {pointToRawQ16} from './position-q16.js';
+import {groundBounds} from './ground.js';
 const SCALE = 65536;
 const q = s => {
   if (typeof s !== 'string' || s.length > 24) throw new TypeError('bounded decimal string required');
@@ -56,10 +57,7 @@ export function compileCircuit(source, title) {
     beam(-l,l,b-.6,b); beam(-l,l,t,t+.6);
   }
   const coords = gates.map(g => [g.x,g.y,g.z]);
-  const bounds = {
-    min:[Math.min(...coords.map(p=>p[0]),spawn[0])-50, -2, Math.min(...coords.map(p=>p[2]),spawn[2])-50],
-    max:[Math.max(...coords.map(p=>p[0]),spawn[0])+50, 0, Math.max(...coords.map(p=>p[2]),spawn[2])+50]
-  };
+  const bounds = groundBounds(gates,spawn,obstacles);
   boxes.push(bounds);
   if (boxes.some(b => spawn.every((n,i)=>n>b.min[i]-1.5 && n<b.max[i]+1.5)))
     throw new RangeError('spawn intersects a solid');
