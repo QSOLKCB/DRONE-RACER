@@ -25,6 +25,9 @@ function updateHUD(){
 function pause(on){
   paused=Boolean(on);clock.setPaused(paused);clearInputs();
   if(paused)notice.textContent='PAUSED — PRESS RESUME';
+  else notice.textContent=lastGate
+    ? 'GATE CLEARED · '+lastGate+'/'+session.track.gates.length
+    : 'FLY THROUGH EACH GATE IN ORDER';
   pauseButton.textContent=paused?'Resume':'Pause';updateHUD();
 }
 function reset(){

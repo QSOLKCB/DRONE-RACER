@@ -48,3 +48,31 @@ test('invalid local record time fails closed',()=>{
   assert.equal(newRace(75).bestTicks,75);
   for(const v of [-1,0,1.2,Infinity,'20'])assert.throws(()=>newRace(v));
 });
+
+test('one simulation sweep credits all consecutive crossed gates, never just the first',()=>{
+  let race=advanceRace(newRace(),[0,3,0],[0,3,-101],TRACK);
+  assert.equal(race.nextGate,2,'both gates 01 and 02 must be credited in one tick');
+  assert.equal(race.ticks,1);
+  race=advanceRace(newRace(),[0,3,5],[0,3,-300],TRACK);
+  assert.equal(race.nextGate,TRACK.gates.length);
+  assert.equal(race.status,'finished');
+  assert.equal(race.finishedTicks,1);
+  assert.equal(race.bestTicks,1);
+});
+test('multi-gate sweep stops at first missed gate and keeps ordered semantics',()=>{
+  let race=advanceRace(newRace(),[-10,3,0],[20,3,-150],TRACK);
+  assert.equal(race.nextGate,1,'gate 01 is valid but gate 02 is off-path');
+  assert.equal(race.ticks,1);
+  race=advanceRace(race,[20,3,-150],[20,3,-300],TRACK);
+  assert.equal(race.nextGate,1,'later gates must not skip the missing gate 02');
+});
+test('real VANILLAJS flight tick consumes multiple gates at high inertial speed',()=>{
+  const session=createSession();
+  setFlightMode(session,false);
+  session.body.position=[0,3,-13.55];
+  session.body.velocity=[0,0,-5091.6];
+  stepSession(session,{thrust:[0,0,0],turn:[0,0,0],brake:false});
+  assert.ok(session.body.position[2]<-75);
+  assert.equal(session.race.nextGate,2);
+  assert.equal(session.race.ticks,1);
+});

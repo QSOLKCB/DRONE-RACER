@@ -42,13 +42,17 @@ export function newRace(bestTicks=null){
 export function advanceRace(race,from,to,track=TRACK){
   validateTrack(track);
   if(race.status!=='running')return {...race};
-  const next={...race,ticks:race.ticks+1},gate=track.gates[next.nextGate];
-  if(gateCrossing(from,to,gate)){
+  const next={...race,ticks:race.ticks+1};
+  // A fast flight step can cross multiple consecutive gates. Their z planes
+  // are strictly ordered, so consume each eligible crossing on this one sweep.
+  // Stop at the first missed gate: a later gate must never skip an earlier one.
+  while(next.nextGate<track.gates.length&&
+        gateCrossing(from,to,track.gates[next.nextGate])){
     next.nextGate++;
-    if(next.nextGate===track.gates.length){
-      next.status='finished';next.finishedTicks=next.ticks;
-      next.bestTicks=next.bestTicks===null?next.ticks:Math.min(next.bestTicks,next.ticks);
-    }
+  }
+  if(next.nextGate===track.gates.length){
+    next.status='finished';next.finishedTicks=next.ticks;
+    next.bestTicks=next.bestTicks===null?next.ticks:Math.min(next.bestTicks,next.ticks);
   }
   return next;
 }

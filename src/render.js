@@ -1,17 +1,37 @@
 // SPDX-License-Identifier: Apache-2.0
 // Software Canvas representation. Simulation never reads rendering results.
 import {quatConjugate,rotate} from '../engine/math/index.js';
-function project(body,p,w,h){
-  const local=rotate(quatConjugate(body.orientation),p.map((x,i)=>x-body.position[i]));
-  if(local[2]>=-0.15)return null;
+const NEAR=-0.150000001;
+function cameraPoint(body,p){
+  return rotate(quatConjugate(body.orientation),p.map((x,i)=>x-body.position[i]));
+}
+function screenPoint(p,w,h){
   const f=Math.min(w,h)*0.95;
-  return [w/2+local[0]/-local[2]*f,h/2-local[1]/-local[2]*f,-local[2]];
+  return [w/2+p[0]/-p[2]*f,h/2-p[1]/-p[2]*f,-p[2]];
+}
+function project(body,p,w,h){
+  const local=cameraPoint(body,p);
+  return local[2]>=-0.15?null:screenPoint(local,w,h);
+}
+function clipNear(a,b){
+  const frontA=a[2]<=NEAR,frontB=b[2]<=NEAR;
+  if(!frontA&&!frontB)return null;
+  if(frontA&&frontB)return [a,b];
+  // Keep the forward portion of each independent line segment, instead of
+  // removing the whole gate frame when a different corner is behind camera.
+  const t=(NEAR-a[2])/(b[2]-a[2]);
+  const intersection=a.map((v,i)=>v+(b[i]-v)*t);
+  return frontA?[a,intersection]:[intersection,b];
 }
 function stroke3(ctx,body,points,w,h,color,width){
-  const q=points.map(p=>project(body,p,w,h));
-  if(q.some(p=>!p))return;
-  ctx.beginPath();q.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));
-  ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();
+  const camera=points.map(p=>cameraPoint(body,p));
+  for(let i=1;i<camera.length;i++){
+    const clipped=clipNear(camera[i-1],camera[i]);
+    if(!clipped)continue;
+    const a=screenPoint(clipped[0],w,h),b=screenPoint(clipped[1],w,h);
+    ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);
+    ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();
+  }
 }
 export function drawScene(canvas,session){
   const ctx=canvas.getContext('2d',{alpha:false}),w=canvas.width,h=canvas.height;
