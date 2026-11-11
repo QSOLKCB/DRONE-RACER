@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 test('pause followed by resume clears stale paused notice in actual main module',async()=>{
   const originals={document:globalThis.document,window:globalThis.window,
     localStorage:globalThis.localStorage,ResizeObserver:globalThis.ResizeObserver,
-    requestAnimationFrame:globalThis.requestAnimationFrame};
+    requestAnimationFrame:globalThis.requestAnimationFrame,
+    devicePixelRatio:globalThis.devicePixelRatio};
   function element(){
     const handlers=new Map();
     return {textContent:'',hidden:false,clientWidth:960,clientHeight:540,
@@ -20,6 +21,7 @@ test('pause followed by resume clears stale paused notice in actual main module'
     globalThis.localStorage={getItem:()=>null,setItem(){}};
     globalThis.ResizeObserver=class{observe(){}};
     globalThis.requestAnimationFrame=()=>0;
+    globalThis.devicePixelRatio=1;
     await import('../src/main.js?test=resume-notice');
     nodes.get('#restart').fire('click');
     assert.equal(nodes.get('#notice').textContent,'FLY THROUGH EACH GATE IN ORDER');
